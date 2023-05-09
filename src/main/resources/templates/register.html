@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Health -注册</title>
+
+    <!-- Vendors Style-->
+    <link rel="stylesheet" th:href="@{css/vendors_css.css}">
+
+    <!-- Style-->
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/skin_color.css}">
+
+</head>
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed" style="background-image: linear-gradient(120deg, #a1c4fd, #c2e9fb);">
+<div >
+<section class="content" >
+<div class="row align-items-center" style="height:900px" >
+<div class="col-md-4 col-12"></div>
+<div class="col-md-4 col-12" >
+    <div class="box box-solid " >
+        <div class="box-header" style="background-image: linear-gradient(to right, #48c6ef 0%, #6f86d6 200%);">
+            <h4 class="box-title" style="color: #FFFFFF"><strong>Health -注册</strong></h4>
+        </div>
+
+        <div class="box-body">
+
+            <!-- /.box-header -->
+            <form class="form" action="/register" method="post">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>用户名</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="uname" name="uname">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="ti-user"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="name" name="name">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class=" ti-id-badge"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" placeholder="password" name="password">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="ti-lock"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>重复密码</label>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" placeholder="confirm password">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="ti-lock"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer text-right">
+                        <button type="button" class="btn btn-rounded btn-warning btn-outline mr-1">
+                            <i class="ti-trash"></i> 取消
+                        </button>
+                        <button type="submit" class="btn btn-rounded btn-info btn-outline">
+                            <i class="ti-save-alt"></i> 提交
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</section>
+</div>
+<script th:src="@{js/vendors.min.js}"></script>
+<script th:src="@{js/chat-popup.js}"></script>
+<script th:src="@{js/feather.min.js}"></script>
+
+<!-- EduAdmin App -->
+<script th:src="@{js/template.js}"></script>
+</body>
+</html>

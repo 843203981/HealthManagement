@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+
+    <title>Health -健康信息</title>
+
+    <!-- Vendors Style-->
+    <link rel="stylesheet" th:href="@{css/vendors_css.css}">
+
+    <!-- Style-->
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/skin_color.css}">
+<style>
+    .upload-wrap{
+        /*position: absolute;
+        top:24px;
+        left: 490px;
+        transform: translate(-50%,-0%);
+        display: inline-block;
+        overflow: hidden;
+        border:1px solid #2d78f4;
+        border-radius: 3px;*/
+    }
+    .upload-wrap .file-ele{
+        /*position: absolute;
+        top:0;
+        right:0;
+        opacity: 0;
+        height: 100%;
+        width: 100%;
+        cursor: pointer;*/
+    }
+    .upload-wrap .file-open{
+        /*width:60px;
+        height:21px;
+
+        line-height:20px;
+        text-align: center;
+        font-size: 14px;
+        color:#fff;
+        background: #4472c4;*/
+    }
+</style>
+</head>
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+
+<div class="wrapper">
+    <div id="loader"></div>
+
+
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-auto">
+                            <h3 class="page-title">病历记录</h3>
+                            <div class="d-inline-block align-items-center">
+                                <nav>
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                        <li class="breadcrumb-item" aria-current="page">健康档案</li>
+                                        <li class="breadcrumb-item active" aria-current="page">病历记录</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Main content -->
+                <section class="content">
+
+                    <div class="col-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h4 class="box-title text-info" ><i class="ti-user mr-15"></i><span th:text="${session.name}"></span> </h4>
+
+
+                                    <div class="box-controls pull-right">
+
+                                        <div class="ti-upload" id="import-icon"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="ti-plus" id="add-icon"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="ti-close" id="close-icon" style="display: none"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="ti-check"  id="check-icon" style="display: none"></div>
+                                    </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body no-padding">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>时间</th>
+                                            <th>疾病名称</th>
+                                            <th>疾病诊断</th>
+                                        </tr>
+                                        <tr id="add-input" class="add1" th:each="user, iterStat:${userIllness}" style="display: none">
+                                            <td id="id-input" th:text="${user.id}"> </td>
+                                            <td><input class="form-control" id="time-input" type="datetime-local"></td>
+                                            <td><input class="form-control" id="1" name="1"></td>
+                                            <td><input class="form-control" id="2" name="2"></td>
+                                        </tr>
+                                        <tr th:each="user, iterStat:${userIllness}">
+                                            <td th:text="${user.id}"> </td>
+                                            <td th:text="${user.updateTime}"> </td>
+                                            <td th:text="${user.illName}"> </td>
+                                            <td th:text="${user.illRx}"> </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </div>
+                            <!-- /.box-body -->
+                            <input  id="fileUpload" type="file" name="file" onchange=addFile()  style="display: none"/>
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </section>
+            </div>
+
+<script th:inline="javascript">
+    function open() {
+        document.getElementById('add-icon').style.display = "none";
+        document.getElementById('import-icon').style.display = "none";
+        document.getElementById('check-icon').style.display = "";
+        document.getElementById('close-icon').style.display = "";
+        document.getElementById('add-input').style.display = "";
+    }
+    function close() {
+        document.getElementById('add-icon').style.display = "";
+        document.getElementById('import-icon').style.display = "";
+        document.getElementById('check-icon').style.display = "none";
+        document.getElementById('close-icon').style.display = "none";
+        document.getElementById('add-input').style.display = "none";
+    }
+
+    function commit() {
+        var i = document.getElementById('id-input').innerText;
+        var a = document.getElementById('1').value;
+        var b = document.getElementById('2').value;
+        var f = document.getElementById('time-input').value;
+        if(!a && !b ){
+            alert("数据为空");
+        }else{
+            if(!f){
+                f=formatDateTime(new Date(),'yyyy-MM-dd HH:mm:ss');
+            }
+            let data = {
+                "id":i,
+                "updateTime": f,
+                "illName":a,
+                "illRx":b,};
+            $.ajax({
+                url:"/illness/add",
+                type:"POST",
+                data:data,
+                dataType:"JSON",
+                success:function (json) {
+                    alert(json.msg);
+                    window.location.reload();
+                },
+                error:function (xhr) {
+                    alert("未知错误"+xhr.message);
+                }
+            })
+
+        }
+
+    }
+
+    function formatDateTime(date, format) {
+        const o = {
+            'M+': date.getMonth() + 1, // 月份
+            'd+': date.getDate(), // 日
+            'h+': date.getHours() % 12 === 0 ? 12 : date.getHours() % 12, // 小时
+            'H+': date.getHours(), // 小时
+            'm+': date.getMinutes(), // 分
+            's+': date.getSeconds(), // 秒
+            'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
+            S: date.getMilliseconds(), // 毫秒
+            a: date.getHours() < 12 ? '上午' : '下午', // 上午/下午
+            A: date.getHours() < 12 ? 'AM' : 'PM', // AM/PM
+        };
+        if (/(y+)/.test(format)) {
+            format = format.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+        }
+        for (let k in o) {
+            if (new RegExp('(' + k + ')').test(format)) {
+                format = format.replace(
+                    RegExp.$1,
+                    RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length)
+                );
+            }
+        }
+        return format;
+    }
+
+    function import1() {
+        document.getElementById('fileUpload').click();
+        
+    }
+
+    //上传文件
+    function addFile() {
+        var file0 = document.getElementById('fileUpload').files[0];
+        if (!file0) {
+            return;
+        }
+        if (file0.type === "application/vnd.ms-excel" || file0.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        { console.log("格式正确"); }
+        else {
+            alert("文件格式错误！");
+            return;
+        }
+        const isLt50M = file0.size / 1024 / 1024 < 50;
+        if (!isLt50M) {
+            alert("上传文件大小不能超过 50MB!");
+            return;
+        }
+        //由于后端接口支持的是上传formData二进制的数据，因此通过 new FormData的方式来实例化，然后将二进制数据绑定到file属性名上面，
+        var formData = new FormData();
+        formData.append('file1',file0)
+        $.ajax({
+            type: 'post',
+            url: "/illness/upload", //这个是我们这边后端提供的接口地址，需要更换成对应的
+            data: formData,
+            dataType:"text",
+            processData: false,
+            contentType: false,
+            success:function (msg) {
+                alert(msg);
+                location=location;
+            },
+            error:function (xhr) {
+                alert("未知错误" + xhr.message);
+            }
+        })
+        $("#fileUpload").val(null); //这个代码是为了解决上传完一个文件后，再次上传此文件无法触发上传的问题
+
+    }
+
+    document.getElementById('add-icon').addEventListener("click",open);
+    document.getElementById('close-icon').addEventListener("click",close);
+    document.getElementById('check-icon').addEventListener("click",commit);
+    document.getElementById('import-icon').addEventListener("click",import1);
+    document.getElementById('fileUpload').addEventListener("change",addFile);
+</script>
+<!-- Vendor JS -->
+<script th:src="@{js/vendors.min.js}"></script>
+<script th:src="@{js/chat-popup.js}"></script>
+<script th:src="@{js/feather.min.js}"></script>
+
+<script th:src="@{js/apexcharts.js}"></script>
+<script th:src="@{js/moment.min.js}"></script>
+<script th:src="@{js/fullcalendar.js}"></script>
+
+<!-- EduAdmin App -->
+<script th:src="@{js/template.js}"></script>
+<script th:src="@{js/dashboard.js}"></script>
+<script th:src="@{js/calendar.js}"></script>
+
+</body>
+</html>

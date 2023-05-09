@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+
+    <title>Health -饮食记录</title>
+
+    <!-- Vendors Style-->
+    <link rel="stylesheet" th:href="@{css/vendors_css.css}">
+
+    <!-- Style-->
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/skin_color.css}">
+    <style>
+        /*背景层*/
+        #popLayer {
+            display: none;
+            background-color: #B3B3B3;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 10;
+            -moz-opacity: 0.8;
+            opacity:.80;
+            filter: alpha(opacity=80);/* 只支持IE6、7、8、9 */
+        }
+
+        /*弹出层*/
+        #popBox {
+            display: none;
+            background-color: #FFFFFF;
+            z-index: 11;
+            width: 80%;
+            height: 80%;
+            position:fixed;
+            top:0;
+            right:0;
+            left:0;
+            bottom:0;
+            margin:auto;
+            text-align:center;
+        }
+
+        /*关闭按钮*/
+        #popBox .close a {
+            text-decoration: none;
+            color: #2D2C3B;
+        }
+        .button-box{
+            display:inline-block;
+            position: fixed;
+            transform: translate(-50%,-50%);
+            bottom: 10%;
+        }
+
+
+
+
+    </style>
+</head>
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+
+<div class="wrapper" id="page">
+    <div id="loader"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-auto">
+                            <h3 class="page-title">饮食记录</h3>
+                            <div class="d-inline-block align-items-center">
+                                <nav>
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                        <li class="breadcrumb-item" aria-current="page">日常记录</li>
+                                        <li class="breadcrumb-item active" aria-current="page">饮食记录</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Main content -->
+                <section class="content">
+
+                            <!-- Main content -->
+                                <div class="container col-12">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-3" id="carbons" style="height: 400px"></div>
+                                        <div class="col-md-3" id="proteins" style="height: 400px"></div>
+                                        <div class="col-md-3" id="fats" style="height: 400px"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-4 col-12">
+                                        <div class="box box-solid bg-warning ">
+                                            <div class="box-header">
+                                                <h4 class="box-title"><strong>早餐</strong></h4>
+                                                <div class="ti-plus pull-right" onclick="popBox('早餐')"></div>
+                                            </div>
+
+                                            <div class="box-body">
+                                                <div class="table-responsive">
+                                                    <table class="table mb-0">
+                                                        <thead>
+                                                        <tr>
+                                                            <th scope="col">食物</th>
+                                                            <th scope="col">热量</th>
+                                                            <th scope="col">碳水</th>
+                                                            <th scope="col">蛋白质</th>
+                                                            <th scope="col">脂肪</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr  th:each="userFood, iterStat:${userFoodsMorning}">
+                                                            <td  th:text="${userFood.foodName}"></td>
+                                                            <td th:text="${userFood.heat}"></td>
+                                                            <td th:text="${userFood.carbons}"></td>
+                                                            <td th:text="${userFood.proteins}"></td>
+                                                            <td th:text="${userFood.fats}"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-4 col-12">
+                                        <div class="box box-solid bg-danger ">
+                                            <div class="box-header">
+                                                <h4 class="box-title"><strong>午餐</strong></h4>
+                                                <div class="ti-plus pull-right" onclick="popBox('午餐')"></div>
+                                            </div>
+
+                                            <div class="box-body">
+                                                <div class="table-responsive">
+                                                    <table class="table mb-0">
+                                                        <thead>
+                                                        <tr>
+                                                            <th scope="col">食物</th>
+                                                            <th scope="col">热量</th>
+                                                            <th scope="col">碳水</th>
+                                                            <th scope="col">蛋白质</th>
+                                                            <th scope="col">脂肪</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr  th:each="userFood, iterStat:${userFoodsNoon}">
+                                                            <td  th:text="${userFood.foodName}"></td>
+                                                            <td th:text="${userFood.heat}"></td>
+                                                            <td th:text="${userFood.carbons}"></td>
+                                                            <td th:text="${userFood.proteins}"></td>
+                                                            <td th:text="${userFood.fats}"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-12">
+                                        <div class="box box-solid bg-secondary">
+                                            <div class="box-header">
+                                                <h4 class="box-title"><strong>晚餐</strong></h4>
+                                                <div class="ti-plus pull-right" onclick="popBox('晚餐')"></div>
+                                            </div>
+
+                                            <div class="box-body">
+                                                <div class="table-responsive">
+                                                    <table class="table mb-0">
+                                                        <thead>
+                                                        <tr>
+                                                            <th scope="col">食物</th>
+                                                            <th scope="col">热量</th>
+                                                            <th scope="col">碳水</th>
+                                                            <th scope="col">蛋白质</th>
+                                                            <th scope="col">脂肪</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr  th:each="userFood, iterStat:${userFoodsNight}">
+                                                            <td  th:text="${userFood.foodName}"></td>
+                                                            <td th:text="${userFood.heat}"></td>
+                                                            <td th:text="${userFood.carbons}"></td>
+                                                            <td th:text="${userFood.proteins}"></td>
+                                                            <td th:text="${userFood.fats}"></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                    <input type="button" name="popBox" value="弹出框" onclick="popBox()">
+                </section>
+
+    <!-- /.content -->
+</div>
+<div id="popLayer"></div>
+<div id="popBox">
+    <div class="content" style="height:90%;overflow:auto;">
+                <!-- /.box-body -->
+                <div class="box-header with-border" id="con1">
+                    <div class="tags-default" id="co1">
+                        <label>
+                            <input  id="food-input" type="text" value="" data-role="tagsinput"
+                                    placeholder="添加食物记录">
+                        </label>
+                    </div>
+                </div>
+                <div class="box-body row col-12 "  >
+                   <div class="box box-solid  col-md-2 food-div"  th:each="food:${foods}"
+                        th:classappend="${food.heat >100} ? 'bg-warning' : 'bg-success' "
+                        th:id="${food.foodName}"  style="margin: 30px 20px">
+                           <div class="box-header">
+                               <h4 class="box-title" ><strong>[[${food.foodName}]]</strong></h4>
+                           </div>
+                           <div class="box-body" >[[${food.heat}]] 千卡/100克</div>
+                       </div>
+                   </div>
+        <div class="button-box" >
+            <button type="button" id="close-icon" class="waves-effect waves-light btn btn-rounded btn-primary-light mb-5">取消</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="waves-effect waves-light btn btn-rounded btn-success-light mb-5">添加</button>
+        </div>
+    </div>
+    <label>
+        <input style="display: none" id="part" >
+    </label>
+</div>
+</div>
+<script>
+    // 获取所有的myDiv元素
+    var foodDivs = document.querySelectorAll(".food-div");
+    // 添加click事件监听器到每个myDiv元素
+    foodDivs.forEach(function(div) {
+
+        div.addEventListener("click", function(event) {
+            var divId = event.currentTarget.id;// 获取触发事件的div元素的id
+            alert(divId)
+
+            var foodInput = document.getElementById("food-input");
+            var input = document.getElementById("food-input").value;
+            if(input === ""){
+                input = divId;
+            }else{
+                input = input + "," + divId;
+            }
+
+            foodInput.value = input;
+
+            alert(foodInput.value)
+            foodInput.outerHTML = foodInput.outerHTML;
+        });
+    });
+
+    /*点击弹出按钮*/
+    function popBox(str) {
+        document.getElementById("part").value = str;
+        var popBox = document.getElementById("popBox");
+        var popLayer = document.getElementById("popLayer");
+        document.getElementById("page").background = "gray";
+        popBox.style.display = "block";
+        popLayer.style.display = "block";
+    }
+
+    document.getElementById("close-icon").addEventListener("click",closeBox)
+    /*点击关闭按钮*/
+    function closeBox() {
+        var popBox = document.getElementById("popBox");
+        var popLayer = document.getElementById("popLayer");
+        popBox.style.display = "none";
+        popLayer.style.display = "none";
+    }
+</script>
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    var fats =  [[${fats}]];
+    var proteins =  [[${proteins}]];
+    var carbons =  [[${carbons}]];
+
+    var fatCount = [[${fatCount}]];
+    var proteinCount = [[${proteinCount}]];
+    var carbonCount = [[${carbonCount}]];
+
+    var dom = document.getElementById('carbons');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        color: [ '#e1a95f','#ffd98c'],
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            selectedMode: false,
+            top: '5%',
+            left: 'center',
+            textStyle: {
+                fontSize: 20,
+            }
+
+        },
+        series: [
+            {
+                name: 'Access From',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: false,
+                        fontSize: 40,
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    { value: carbonCount-carbons, name:'剩余可摄入量'  },
+                    { value: carbons, name: '碳水摄入量' },
+
+                ]
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+
+    var dom = document.getElementById('proteins');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        color: ['#bcaf9e', '#f4e4cd'],
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            top: '5%',
+            left: 'center',
+            textStyle: {
+                fontSize: 20,
+            }
+        },
+        series: [
+            {
+                name: 'Access From',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: false,
+                        fontSize: 40,
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    { value: proteinCount-proteins, name: '剩余可摄入量' },
+                    { value: proteins, name: '蛋白质摄入量' },
+
+                ]
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+
+    var dom = document.getElementById('fats');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        color: ['#f08080', '#eebbaa'],
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            top: '5%',
+            left: 'center',
+            textStyle: {
+                fontSize: 20,
+            }
+        },
+        series: [
+            {
+                name: 'Access From',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: false,
+                        fontSize: 40,
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    { value: fatCount-fats, name: '剩余可摄入量' },
+                    { value: fats, name: '脂肪摄入量' },
+
+                ]
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+
+
+
+
+
+
+<!-- Vendor JS -->
+<script th:src="@{js/vendors.min.js}"></script>
+<script th:src="@{js/chat-popup.js}"></script>
+<script th:src="@{js/feather.min.js}"></script>
+<script th:src="@{js/bootstrap-tagsinput.js}"></script>
+<script th:src="@{js/apexcharts.js}"></script>
+<script th:src="@{js/moment.min.js}"></script>
+<script th:src="@{js/fullcalendar.js}"></script>
+
+<!-- EduAdmin App -->
+<script th:src="@{js/template.js}"></script>
+<script th:src="@{js/dashboard.js}"></script>
+<script th:src="@{js/calendar.js}"></script>
+
+</body>
+</html>

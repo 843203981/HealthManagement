@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Login</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+        }
+
+        .container {
+            position: relative;
+            display: flex;
+            /* 视域 */
+            perspective: 1200px;
+            transform-style: preserve-3d;
+        }
+
+        .div-description {
+            width: 300px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: #fff;
+            border-radius: 5px 0 0 5px;
+            transform: translateZ(-1px);
+        }
+
+        .div-description:nth-last-child(1) {
+            border-radius: 0 5px 5px 0;
+        }
+
+        .div-description img {
+            width: 75%;
+            margin-bottom: 15px;
+        }
+
+        .div-description span {
+            font-size: 12px;
+            color: #555;
+        }
+
+        .div-form {
+            width: 300px;
+            height: 400px;
+            position: absolute;
+            left: 0;
+            transition: .5s;
+            transform-origin: right;
+        }
+
+        .div-form .form-userLogin {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            background-image: linear-gradient(to right, #48c6ef 0%, #6f86d6 200%);
+            border-radius: 5px 0 0 5px;
+        }
+
+        .div-form .form-adminLogin {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            background-image: linear-gradient(to right, #48c6ef -100%, #6f86d6 100%);
+            border-radius: 0 5px 5px 0;
+            transform: rotateY(180deg);
+        }
+
+        .div-form form.disappear {
+            display: none;
+        }
+
+        .div-form h1 {
+            margin: 50px 0 25px 0;
+            /* 大写 */
+            text-transform: uppercase;
+            color: #fff;
+            letter-spacing: 5px;
+        }
+
+        .div-form input {
+            background-color: transparent;
+            width: 70%;
+            color: #fff;
+            outline: none;
+            border: none;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+            padding: 5px 0;
+            margin: 8px 0;
+            text-indent: 5px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .div-form input::placeholder {
+            color: #fff;
+        }
+
+        .div-form button[type="button"] {
+            width: 70%;
+            height: 32px;
+            margin: 30px auto 10px;
+            font-size: 14px;
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: .4s;
+        }
+
+        .div-form button[type="button"]:hover {
+            letter-spacing: 3px;
+            background-color: #fff;
+            color: #000;
+        }
+
+        .div-form .control {
+            color: #fff;
+            margin: 5px;
+            font-size: 13px;
+            position:absolute;
+            right:0px;
+            bottom:0px;
+        }
+
+        .div-form .control a {
+            color: #fff;
+            margin: 0 5px;
+            letter-spacing: 1px;
+        }
+
+        .div-form .control a:hover {
+            color: #000;
+        }
+
+        .div-form .register {
+            color: #fff;
+            margin: 5px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container" id="showHtml">
+    <div class="div-description">
+        <img src="img/2.png" alt=""><span th:value="${session.uname}">更多信息..</span>
+    </div>
+    <div class="div-form"><!--action="/login"  method="post"-->
+        <form id="loginForm"  class="form-userLogin">
+            <h1>用户登录</h1>
+            <input type="hidden" th:value="${session.publicKey}" name="publicKey" id="publicKey">
+            <input type="text" placeholder="帐号" name="uname">
+            <input type="password" placeholder="密码" name="password">
+            <button type="button" id="bt">登录</button>
+            <div class="control">
+                <span><a href="#">切换到管理登录</a></span>
+            </div>
+            <div class="register">
+                <span>没有帐号？<a href="/register">注册</a></span>
+            </div>
+        </form><!--action="/login" method="post"-->
+        <form  id="loginForm1" class="form-adminLogin disappear" >
+            <h1>管理登录</h1>
+            <input type="text" placeholder="帐号" name="uname">
+            <input type="password" placeholder="密码" name="password">
+            <button type="button" id="bt1">登录</button>
+            <div class="control">
+                <span><a href="#">切换到用户登录</a></span>
+            </div>
+
+        </form>
+    </div>
+    <div class="div-description">
+        <img src="img/1.png" alt=""><span>更多信息..</span>
+    </div>
+</div>
+</body>
+<!--jquery cdn-->
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<!--引入jsencrypt.js  cdn-->
+<script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+<!--SweetAlert-->
+<link href="https://cdn.bootcdn.net/ajax/libs/limonte-sweetalert2/0.0.1/sweetalert2.css" rel="stylesheet">
+<script src="https://cdn.bootcdn.net/ajax/libs/limonte-sweetalert2/0.0.1/sweetalert2.min.js"></script>
+
+<script type="importmap">
+  {
+    "imports": {
+      "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+    }
+  }
+</script>
+<script>
+    var btn = document.querySelectorAll('.control a')
+    var formContainer = document.querySelector('.div-form')
+    var form = document.querySelectorAll('.div-form form')
+
+    // 切换管理登录
+    btn[0].addEventListener('click', function (e) {
+        form[0].classList.add('disappear')
+        form[1].classList.remove('disappear')
+        formContainer.style.transform = 'rotateY(180deg)'
+    })
+    // 切换用户登录
+    btn[1].addEventListener('click', function (e) {
+        form[1].classList.add('disappear')
+        form[0].classList.remove('disappear')
+        formContainer.style.transform = 'none'
+    })
+</script>
+
+<script type="text/javascript">
+    $("#bt").click(function () {
+        let data = $("#loginForm").serializeArray();
+        let publicKey = data[0].value;
+        let username = data[1].value;
+        let oldPwd = data[2].value;
+        let encrypt_Pwd = encrypt(publicKey, oldPwd);
+        let data1 = {"uname": username, "password": encrypt_Pwd};
+        $.ajax({
+            url: '/login',
+            type: 'POST',
+            data: data1,
+            dataType: 'JSON',
+            success: function (json) {
+                if(json.id === 0){
+                    alert("账号或密码错误");
+                }else{
+                    alert("登录成功");
+                    location.href="/"
+                }
+            }
+        });
+    });
+
+
+    // RSA前端加密
+    function encrypt(key, oldPwd) {
+        let encrypt = new JSEncrypt();
+        encrypt.setPublicKey(key);
+        let encrypted = encrypt.encrypt(oldPwd);
+        return encrypted;
+    }
+</script>
+
+
+
+</html>

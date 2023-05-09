@@ -1,0 +1,22 @@
+server:
+  port: 8080
+spring:
+  mvc:
+    servlet:
+      load-on-startup: 1
+  application:
+    name: health
+  datasource:
+    url: jdbc:mysql://localhost:3306/health?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    username: root
+    password: 101203
+    driver-class-name: com.mysql.jdbc.Driver
+  thymeleaf:
+    cache: false
+  redis:
+    port: 6379
+    password: 101203
+    host: localhost
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
