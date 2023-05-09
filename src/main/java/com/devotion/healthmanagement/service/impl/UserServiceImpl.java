@@ -52,9 +52,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
         String passwordCheck = userCheck.getPassword();
 
-        //Todo:加密密码
-        // 将原文密码和密码进行对比，如果返回true，说明两者一样
-
         String privateKey = rsa.privateKey;
         // 获得RSA类型的私钥
         RSAPrivateKey rsaPrivateKey = RSAUtils.getPrivateKey(privateKey);

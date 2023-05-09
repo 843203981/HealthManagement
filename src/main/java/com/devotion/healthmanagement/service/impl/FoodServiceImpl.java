@@ -1,5 +1,6 @@
 package com.devotion.healthmanagement.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.devotion.healthmanagement.entity.Food;
 import com.devotion.healthmanagement.entity.dto.UserFood;
@@ -19,5 +20,25 @@ public class FoodServiceImpl extends ServiceImpl<FoodMapper, Food> implements Fo
     @Override
     public List<UserFood> list(Integer id, String date) {
         return foodMapper.selectUserFoodList(id,date);
+    }
+
+    @Override
+    public Food match(String foodName) {
+        Food food1 = new Food();
+        food1.setFoodName(foodName);
+        Food foodSelect = foodMapper.selectOne(new QueryWrapper<Food>().eq("food_name",foodName));
+        if(foodSelect == null){
+            foodMapper.insert(food1);
+            foodSelect =  foodMapper.selectOne(new QueryWrapper<Food>().eq("food_name",foodName));
+        }
+        return foodSelect;
+
+    }
+
+    @Override
+    public void saveUserFoods(List<UserFood> userFoods) {
+        for (UserFood userFood : userFoods) {
+            foodMapper.insertUserFood(userFood);
+        }
     }
 }

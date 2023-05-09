@@ -22,7 +22,6 @@ public class MatchUtils {
         if(illness == null){
             illness = new Illness();
             illness.setIllName(userIllness.getIllName());
-            log.warn("illness: " + illness);
             illnessMapper.insert(illness);
         }
         userIllness.setIllId(illnessMapper.selectOne(queryWrapper).getIllId());
