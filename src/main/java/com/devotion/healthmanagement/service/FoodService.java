@@ -8,9 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface FoodService extends IService<Food>{
-    public List<UserFood> list(Integer id, String date);
-
-    public Food match(String foodName);
+    List<UserFood> list(Integer id, String date);
+    Food match(String foodName);
 
     void saveUserFoods(List<UserFood> userFoods);
 }
