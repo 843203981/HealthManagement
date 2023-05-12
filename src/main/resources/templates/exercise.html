@@ -100,7 +100,7 @@
                 <div class="box box-solid bg-github ">
                     <div class="box-header">
                         <h4 class="box-title"><strong>运动记录</strong></h4>
-                        <div class="ti-plus pull-right" onclick="popBox('早餐')"></div>
+                        <div class="ti-plus pull-right" onclick="popBox();Change_second_selectWords()"></div>
                     </div>
 
                     <div class="box-body">
@@ -138,61 +138,110 @@
         <!-- /.box-body -->
         <div class="box-header with-border" id="con1">
             <div class="tags-default" id="co1">
-                <label>
-                    <input id="food-input" type="text" value="" data-role="tagsinput"
-                           placeholder="添加食物记录">
-                </label>
+                <h4><strong>添加运动记录</strong></h4>
             </div>
         </div>
         <div class="box-body row col-12 ">
-            <div class="box box-solid  col-md-2 food-div" th:each="food:${foods}"
-                 th:classappend="${food.heat >100} ? 'bg-warning' : 'bg-success' "
-                 th:id="${food.foodName}" style="margin: 30px 20px">
-                <div class="box-header">
-                    <h4 class="box-title"><strong>[[${food.foodName}]]</strong></h4>
-                </div>
-                <div class="box-body">[[${food.heat}]] 千卡/100克</div>
+            <div class="col-md-4">
+                <h5 class="my-10">运动类型</h5>
+                <select class="selectpicker" id="type-select" onchange="Change_second_selectWords();">
+                    <option>日常活动</option>
+                    <option>有氧运动</option>
+                    <option>无氧运动</option>
+                </select>
             </div>
-        </div>
-        <div class="button-box">
-            <button type="button" id="close-icon"
-                    class="waves-effect waves-light btn btn-rounded btn-primary-light mb-5">取消
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="button" id="commit-icon" class="waves-effect waves-light btn btn-rounded btn-success-light mb-5">添加</button>
+            <div class="col-md-4">
+                <h5 class="my-10">运动名称</h5>
+                <select class="btn dropdown-toggle btn-rounded btn-default" id="sport-select" style="width: 100%; text-align: left" >
+                </select>
+            </div>
+            &nbsp;
+            <div class="form-group">
+                <div style="height: 10px"></div>
+                <label class="control-label">运动时长</label>
+                <input id="time" type="text" value="30" name="demo3_1" data-bts-button-down-class="btn btn-secondary" data-bts-button-up-class="btn btn-secondary"> </div>
         </div>
     </div>
-    <label>
-        <input style="display: none" id="part">
-    </label>
+    <div class="button-box">
+        <button type="button" id="close-icon"
+                class="waves-effect waves-light btn btn-rounded btn-primary-light mb-5" onclick="closeBox()">取消
+        </button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="button" id="commit-icon" class="waves-effect waves-light btn btn-rounded btn-success-light mb-5" onclick="commitExercise()">添加</button>
+    </div>
 </div>
-<script>
-    document.getElementById("commit-icon").addEventListener("click",commitFood)
-    function commitFood() {
-        let part = document.getElementById("part").value;
-        let foodInput = document.getElementById("food-input").value;
+<script type="text/javascript" th:inline="javascript">
+    let highSport = [[${highSports}]];
+    let lowSport = [[${lowSports}]];
+    let dailySport = [[${dailySports}]];
+
+    highSport = JSON.parse(highSport);
+    lowSport = JSON.parse(lowSport);
+    dailySport = JSON.parse(dailySport);
+    function Change_second_selectWords(){
+        //根据id找到两个下拉框对象
+        var target1 = document.getElementById("type-select");
+        var target2 = document.getElementById("sport-select");
+        //得到第一个下拉框的内容
+        var selected_initial = target1.options[target1.selectedIndex].value;
+        //清空第二个下拉框
+        target2.innerHTML = "";
+
+        switch (selected_initial) {
+            case "日常活动":
+                for (var i = 0; i < dailySport.length; i++) {
+                    //将列表中的内容加入到第二个下拉框
+                    target2.options.add(new Option(dailySport[i], dailySport[i]));
+                }
+                break;
+            case "有氧运动":
+                for (var i = 0; i < lowSport.length; i++) {
+                    var option = new Option(lowSport[i], lowSport[i]);
+                    //将列表中的内容加入到第二个下拉框
+                    target2.options.add(option);
+                }
+                break;
+            case "无氧运动":
+                for (var i = 0; i < highSport.length; i++) {
+                    var option = new Option(highSport[i], highSport[i]);
+                    //将列表中的内容加入到第二个下拉框
+                    target2.options.add(option);
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    document.getElementById("commit-icon").addEventListener("click", commitExercise);
+    document.getElementById("close-icon").addEventListener("click", closeBox);
+
+    function commitExercise() {
+        let sport = document.getElementById("sport-select").value;
+        let time = document.getElementById("time").value;
+        alert(sport + time)
         $.ajax({
-            url: "/eat/add",
+            url: "/exercise/add",
             type: "post",
             data: {
-                "part": part,
-                "foodInput": foodInput
+                "sportName": sport,
+                "time": time,
             },
-            dataType:"JSON",
-            success:function (json) {
+            dataType: "JSON",
+            success: function (json) {
                 alert(json.msg);
                 window.location.reload();
             },
             error: function (xhr) {
-                alert("添加失败"+xhr.status);
+                alert("添加失败" + xhr.status);
             }
         })
     }
 
 
     /*点击弹出按钮*/
-    function popBox(str) {
-        document.getElementById("part").value = str;
+    function popBox() {
         var popBox = document.getElementById("popBox");
         var popLayer = document.getElementById("popLayer");
         document.getElementById("page").background = "gray";
@@ -200,7 +249,7 @@
         popLayer.style.display = "block";
     }
 
-    document.getElementById("close-icon").addEventListener("click", closeBox)
+
 
     /*点击关闭按钮*/
     function closeBox() {
@@ -339,17 +388,36 @@
 
 <!-- Vendor JS -->
 <script th:src="@{js/vendors.min.js}"></script>
-<script th:src="@{js/chat-popup.js}"></script>
 <script th:src="@{js/feather.min.js}"></script>
 <script th:src="@{js/bootstrap-tagsinput.js}"></script>
 <script th:src="@{js/apexcharts.js}"></script>
 <script th:src="@{js/moment.min.js}"></script>
 <script th:src="@{js/fullcalendar.js}"></script>
+<script th:src="@{js/bootstrap-select.js}"></script>
+<script th:src="@{js/jquery.bootstrap-touchspin.min.js}"></script>
+<script th:src="@{js/select2.full.js}"></script>
+
+<script th:src="@{js/bootstrap-select.js}"></script>
+
+<script th:src="@{js/bootstrap-select.js}"></script>
+<script th:src="@{js/bootstrap-tagsinput.js}"></script>
+<script th:src="@{js/jquery.bootstrap-touchspin.min.js}"></script>
+<script th:src="@{js/select2.full.js}"></script>
+<script th:src="@{js/jquery.inputmask.js}"></script>
+<script th:src="@{js/jquery.inputmask.date.extensions.js}"></script>
+<script th:src="@{js/jquery.inputmask.extensions.js}"></script>
+<script th:src="@{js/moment.min.js}"></script>
+<script th:src="@{js/daterangepicker.js}"></script>
+<script th:src="@{js/bootstrap-datepicker.min.js}"></script>
+<script th:src="@{js/bootstrap-colorpicker.min.js}"></script>
+<script th:src="@{js/bootstrap-timepicker.min.js}"></script>
+<script th:src="@{js/icheck.min.js}"></script>
 
 <!-- EduAdmin App -->
 <script th:src="@{js/template.js}"></script>
 <script th:src="@{js/dashboard.js}"></script>
 <script th:src="@{js/calendar.js}"></script>
+<script th:src="@{js/advanced-form-element.js}"></script>
 
 </body>
 </html>

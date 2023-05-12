@@ -9,4 +9,8 @@ import java.util.List;
 
 public interface SportService extends IService<Sport> {
     public List<UserSport> list(Integer id, String date);
+
+    Sport match(String sportName);
+
+    void saveUserSport(UserSport userSport);
 }
