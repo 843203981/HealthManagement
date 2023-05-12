@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+
+    <title>Health -饮食记录</title>
+
+    <!-- Vendors Style-->
+    <link rel="stylesheet" th:href="@{css/vendors_css.css}">
+
+    <!-- Style-->
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/skin_color.css}">
+</head>
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+
+<div class="wrapper" id="page">
+    <div id="loader"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="page-title">饮食分析</h3>
+                <div class="d-inline-block align-items-center">
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                            <li class="breadcrumb-item" aria-current="page">分析评估</li>
+                            <li class="breadcrumb-item active" aria-current="page">饮食分析</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Main content -->
+        <div class="container col-12">
+            <div class="row">
+                <div class="col-md-6" id="content1" style="height: 600px"></div>
+                <div class="col-md-6" id="content2" style="height: 600px"></div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </section>
+
+</div>
+
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    var heatData = [[${heatDates}]];
+    var proteinData = [[${proteinDates}]];
+    var carbonData = [[${carbonDates}]];
+    var fatData = [[${fatDates}]];
+    var dateData = [[${dateList}]];
+
+    var dom = document.getElementById('content1');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        color:['#f4e4cd','#ffd98c', '#eebbaa'],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                // Use axis to trigger tooltip
+                type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+            }
+        },
+        legend: {},
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+        },
+        xAxis: {
+            type: 'value'
+        },
+        yAxis: {
+            type: 'category',
+            data: dateData,
+        },
+        series: [
+            {
+                name: '蛋白质摄入量',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: proteinData
+            },
+            {
+                name: '碳水摄入量',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: carbonData
+            },
+            {
+                name: '脂肪摄入量',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: fatData
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+<script type="text/javascript" th:inline="javascript">
+    var dom = document.getElementById('content2');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        color:['#91cc75'],
+        title: {
+            show: true,//false
+            text: "热量摄入图",//主标题文本
+            subtext: "单位：千卡",//副标题文本
+            left: "center",//水平居中
+        },
+            xAxis: {
+            type: 'category',
+            data: dateData
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                data: heatData,
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(180, 180, 180, 0.2)'
+                }
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+
+
+<!-- Vendor JS -->
+<script th:src="@{js/vendors.min.js}"></script>
+<script th:src="@{js/feather.min.js}"></script>
+<script th:src="@{js/apexcharts.js}"></script>
+<script th:src="@{js/moment.min.js}"></script>
+<script th:src="@{js/fullcalendar.js}"></script>
+
+<!-- EduAdmin App -->
+<script th:src="@{js/template.js}"></script>
+<script th:src="@{js/dashboard.js}"></script>
+<script th:src="@{js/calendar.js}"></script>
+
+</body>
+</html>

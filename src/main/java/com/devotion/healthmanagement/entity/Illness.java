@@ -16,8 +16,10 @@ public class Illness {
     private Float tempBtm;
     private Integer hrtrateTop;
     private Integer hrtrateBtm;
-    private Integer pressuerTop;
-    private Integer pressureBtm;
+    private Integer highPressureTop;
+    private Integer highPressureBtm;
+    private Integer lowPressureTop;
+    private Integer lowPressureBtm;
     private Integer fatTop;
     private Integer fatBtm;
     private Integer bldsugarTop;

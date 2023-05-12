@@ -5,6 +5,7 @@ import com.devotion.healthmanagement.entity.Sport;
 import com.devotion.healthmanagement.entity.dto.UserFood;
 import com.devotion.healthmanagement.entity.dto.UserSport;
 import com.devotion.healthmanagement.service.SportService;
+import com.devotion.healthmanagement.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,12 +22,14 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/exercise")
 public class ExerciseController {
 
     @Autowired
     SportService sportService;
-    @GetMapping("")
+
+    @Autowired
+    DateUtil dateUtil;
+    @GetMapping("/exercise")
     public String toExercisePage(Model model, HttpServletRequest request){
         Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
         Date date= new Date();
@@ -87,7 +92,7 @@ public class ExerciseController {
     }
 
     @ResponseBody
-    @PostMapping("/add")
+    @PostMapping("/exercise/add")
     public String addExercise(@RequestParam String sportName, Integer time, HttpServletRequest request){
 
         Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
@@ -104,5 +109,31 @@ public class ExerciseController {
         userSport.setType(sport.getType());
         sportService.saveUserSport(userSport);
         return "{\"msg\":\"添加成功\"}";
+    }
+
+    @GetMapping("/exerciseAnalysis")
+    public String toExerciseAnalysisPage(Model model, HttpServletRequest request) throws ParseException {
+        Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
+        List<Integer> costs = new ArrayList<>();
+        List<String> dates = dateUtil.getSevenDate();
+        /*List<String> dateList = new ArrayList<>();*/
+        for (String date : dates) {
+            List<UserSport> userSports = sportService.list(id,date);
+            int cost = 0;
+            for (UserSport userSport : userSports) {
+                cost += userSport.getCost()*userSport.getTime();
+            }
+            costs.add(cost);
+            /*DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date1 = inputFormat.parse(date);
+            DateFormat outputFormat = new SimpleDateFormat("yyyy年MM月dd日");
+            date = outputFormat.format(date1);
+            dateList.add(date);*/
+        }
+        log.info(costs.toString());
+        log.info(dates.toString());
+        model.addAttribute("costs", costs);
+        model.addAttribute("dates", dates);
+        return "exerciseAnalysis";
     }
 }

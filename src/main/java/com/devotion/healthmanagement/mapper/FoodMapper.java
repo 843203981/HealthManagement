@@ -11,7 +11,7 @@ import java.util.List;
 
 @Mapper
 public interface FoodMapper extends BaseMapper<Food> {
-    @Select("select id,food_name,heat,carbons,proteins,fats,part,date from user_food where id = #{id} and date = #{date}")
+    @Select("select user_food.id,food.food_name,food.heat,food.carbons,food.proteins,food.fats,part,date from user_food,food where user_food.food_id=food.food_id and user_food.id = #{id} and date = #{date}")
     List<UserFood> selectUserFoodList(Integer id, String date);
 
     @Insert("insert into user_food(id,food_id,part,date,food_name,fats,proteins,carbons,heat) values(#{id},#{foodId},#{part},#{date},#{foodName},#{fats},#{proteins},#{carbons},#{heat})")

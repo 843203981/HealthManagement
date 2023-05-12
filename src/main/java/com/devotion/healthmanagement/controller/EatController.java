@@ -5,14 +5,12 @@ import com.devotion.healthmanagement.entity.Food;
 import com.devotion.healthmanagement.entity.dto.UserFood;
 import com.devotion.healthmanagement.service.BodyService;
 import com.devotion.healthmanagement.service.FoodService;
+import com.devotion.healthmanagement.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -22,7 +20,6 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/eat")
 public class EatController {
 
     @Autowired
@@ -31,9 +28,10 @@ public class EatController {
     @Autowired
     BodyService bodyService;
 
+    @Autowired
+    DateUtil dateUtil;
 
-
-    @RequestMapping("")
+    @GetMapping("/eat")
     public String toEatPage(Model model, HttpServletRequest request){
         Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
         Date date= new Date();
@@ -105,7 +103,7 @@ public class EatController {
     }
 
     @ResponseBody
-    @PostMapping("/add")
+    @PostMapping("/eat/add")
     public String addUserFood(@RequestParam String part, String foodInput, HttpServletRequest request){
         String[] food = foodInput.split(",");
         List<UserFood> userFoods = new ArrayList<>();
@@ -129,5 +127,52 @@ public class EatController {
 
         return "{\"msg\":\"添加成功\"}";
 
+    }
+
+    @GetMapping("/eatAnalysis")
+    public String toAnalysisPage(Model model, HttpServletRequest request){
+        Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
+        List<String> dates = dateUtil.getSevenDate();
+        List<UserFood> userFoods = new ArrayList<>();
+        List<Integer> heatDates = new ArrayList<>();
+        List<Integer> fatDates = new ArrayList<>();
+        List<Integer> proteinDates = new ArrayList<>();
+        List<Integer> carbonDates = new ArrayList<>();
+
+        for (String date : dates) {
+            int heatDate = 0;
+            int fatDate = 0;
+            int proteinDate = 0;
+            int carbonDate = 0;
+            List<UserFood> userFoodDate = foodService.list(id,date);
+            for (UserFood userFood : userFoodDate) {
+                heatDate += userFood.getHeat();
+                fatDate += userFood.getFats();
+                proteinDate += userFood.getProteins();
+                carbonDate += userFood.getCarbons();
+            }
+            UserFood userFood = new UserFood();
+            userFood.setHeat(heatDate);
+            userFood.setFats(fatDate);
+            userFood.setProteins(proteinDate);
+            userFood.setCarbons(carbonDate);
+            userFood.setId(id);
+            userFood.setDate(date);
+            userFoods.add(userFood);
+        }
+        for (UserFood userFood : userFoods) {
+            heatDates.add(userFood.getHeat());
+            fatDates.add(userFood.getFats());
+            proteinDates.add(userFood.getProteins());
+            carbonDates.add(userFood.getCarbons());
+        }
+
+
+        model.addAttribute("heatDates",heatDates);
+        model.addAttribute("fatDates",fatDates);
+        model.addAttribute("proteinDates",proteinDates);
+        model.addAttribute("carbonDates",carbonDates);
+        model.addAttribute("dateList",dates);
+        return "eatAnalysis";
     }
 }

@@ -220,7 +220,6 @@
     function commitExercise() {
         let sport = document.getElementById("sport-select").value;
         let time = document.getElementById("time").value;
-        alert(sport + time)
         $.ajax({
             url: "/exercise/add",
             type: "post",
