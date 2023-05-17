@@ -64,10 +64,10 @@
                                 <th>时间</th>
                                 <th>温度(°C)</th>
                                 <th>心率(BPM)</th>
-                                <th>血压(收缩压kPa)</th>
-                                <th>血压(舒张压kPa)</th>
+                                <th>血压(收缩压mmHg)</th>
+                                <th>血压(舒张压mmHg)</th>
                                 <th>血糖(mmol/L)</th>
-                                <th>体脂率(%)</th>
+                                <th>血脂(mmol/L)</th>
                             </tr>
                             <tr id="add-input" class="add1" th:each="user, iterStat:${userHealth}" style="display: none">
                                 <td id="id-input" th:text="${user.id}"> </td>
@@ -87,7 +87,7 @@
                                 <td th:text="${user.highPressure}"> </td>
                                 <td th:text="${user.lowPressure}"> </td>
                                 <td th:text="${user.bloodGlucose}"> </td>
-                                <td th:text="${user.fatPercentage}"> </td>
+                                <td th:text="${user.bloodFat}"> </td>
                             </tr>
 
 
@@ -163,7 +163,7 @@
                 "highPressure":c,
                 "lowPressure":d,
                 "bloodGlucose":e,
-                "fatPercentage":g,};
+                "bloodFat":g,};
             $.ajax({
                 url:"/health/add",
                 type:"POST",

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+
+    <title>Health -饮食记录</title>
+
+    <!-- Vendors Style-->
+    <link rel="stylesheet" th:href="@{css/vendors_css.css}">
+
+    <!-- Style-->
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/skin_color.css}">
+</head>
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+
+<div class="wrapper" id="page">
+    <div id="loader"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="page-title">健康指标评估</h3>
+                <div class="d-inline-block align-items-center">
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                            <li class="breadcrumb-item" aria-current="page">分析评估</li>
+                            <li class="breadcrumb-item active" aria-current="page">健康指标评估</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Main content -->
+        <div class="container col-12">
+            <div class="row">
+                <div class="box col-12">
+                    <div class="box-header with-border">
+                        <h4 class="box-title text-info" ><i class="ti-user mr-15"></i><span th:text="${session.name}"></span> </h4>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <tr>
+                                    <th>序号</th>
+                                    <th>时间</th>
+                                    <th>身高(cm)</th>
+                                    <th>体重(kg)</th>
+                                    <th>年龄</th>
+                                    <th>性别</th>
+                                    <th>BMI指数</th>
+                                </tr>
+                                <tr>
+                                    <td th:text="${user.id}"> </td>
+                                    <td th:text="${user.updateTime}"> </td>
+                                    <td th:text="${user.height}"> </td>
+                                    <td th:text="${user.weight}"> </td>
+                                    <td th:text="${user.age}"> </td>
+                                    <td th:text="${user.sex}"></td>
+                                    <td th:text="${user.bmi}" th:classappend="${(user.bmi < 24 && user.bmi >10) ? 'bg-success' : 'bg-warning'  }"> </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+
+                </div>
+                <div class="box col-md-12" th:if="${user.intensity} == null">
+                    <div class="box-header">
+                        <h4 class="box-title text-success" >请选择你的活动强度</h4>
+                        <div class="demo-checkbox box-body" >
+                            <input type="checkbox" id="md_checkbox_1" class="chk-col-primary" onclick="updateSelection(this)" >
+                            <label for="md_checkbox_1">久坐或少量运动</label>
+                            <input type="checkbox" id="md_checkbox_4" class="chk-col-info" onclick="updateSelection(this)" >
+                            <label for="md_checkbox_4">轻度活动或每周锻炼3-4次</label>
+                            <input type="checkbox" id="md_checkbox_3" class="chk-col-success" onclick="updateSelection(this)" >
+                            <label for="md_checkbox_3">中度活动或每周锻炼4-5次</label>
+                            <input type="checkbox" id="md_checkbox_6" class="chk-col-warning" onclick="updateSelection(this)" >
+                            <label for="md_checkbox_6">高度活动或每周锻炼6-7次</label>
+                            <input type="checkbox" id="md_checkbox_7" class="chk-col-danger" onclick="updateSelection(this)" >
+                            <label for="md_checkbox_7">极高活动或重体力工作</label>
+                            <button type="button" class="waves-effect waves-light btn btn-rounded btn-primary mb-5" onclick="submitValues()">提交</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="box" th:if="${user.intensity} != null">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>基础代谢(cal)</th>
+                                <th>推荐碳水摄入量(g)</th>
+                                <th>推荐蛋白质摄入量(g)</th>
+                                <th>推荐脂肪摄入量(g)</th>
+                            </tr>
+                            <tr>
+                                <td th:text="${user.heatCount}"> </td>
+                                <td th:text="${user.carbonCount}"> </td>
+                                <td th:text="${user.proteinCount}"> </td>
+                                <td th:text="${user.fatCount}"> </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+
+                </div>
+            </div>
+            <div id="container" style="height: 500px"></div>
+            <!-- /.row -->
+        </div>
+    </section>
+
+</div>
+<script>
+    let selectedCheckbox = null;
+
+    function updateSelection(checkbox) {
+        if (selectedCheckbox !== null && checkbox !== selectedCheckbox) {
+            selectedCheckbox.checked = false;
+        }
+        selectedCheckbox = checkbox;
+    }
+
+    function submitValues() {
+        const values = [1.2, 1.375, 1.55, 1.725, 1.9];
+        const checkboxes = document.querySelectorAll('.demo-checkbox input[type="checkbox"]');
+        const selectedValues = [];
+
+        checkboxes.forEach(function(checkbox, index) {
+            if (checkbox.checked) {
+                selectedValues.push(values[index]);
+            }
+        });
+
+        console.log(selectedValues); // 在控制台中输出所选的数值
+        // 在这里执行提交所选数值的其他操作
+
+        $.ajax({
+            url:"/body/intensity",
+            type:"POST",
+            data: {"intensity":selectedValues[0]},
+            dataType:"JSON",
+            success:function (json) {
+                alert(json.msg);
+                window.location.reload();
+            },
+            error:function (xhr) {
+                alert("未知错误"+xhr.message);
+            }
+        });
+    }
+</script>
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+<script type="text/javascript">
+    var dom = document.getElementById('container');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+        color:['#ffd98c','#f4e4cd','#eebbaa'],
+        tooltip: {
+            trigger: 'item',
+        },
+        legend: {
+            top: '10%',
+            left: 'center'
+        },
+        title: {
+            show: true,//false
+            text: "营养元素推荐摄入图",//主标题文本
+            subtext: "单位：g",//副标题文本
+            left: "center",//水平居中
+        },
+        series: [
+            {
+                name: 'Access From',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                label: {
+                    show: false,
+                    position: 'center',
+                    formatter: "{b}:{c}g ({d}%)"
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 40,
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    { value: [[${user.carbonCount}]], name: '碳水' },
+                    { value: [[${user.proteinCount}]], name: '蛋白质' },
+                    { value: [[${user.fatCount}]], name: '脂肪' },
+                ]
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+
+
+<!-- Vendor JS -->
+<script th:src="@{js/vendors.min.js}"></script>
+<script th:src="@{js/feather.min.js}"></script>
+<script th:src="@{js/apexcharts.js}"></script>
+<script th:src="@{js/moment.min.js}"></script>
+<script th:src="@{js/fullcalendar.js}"></script>
+
+<!-- EduAdmin App -->
+<script th:src="@{js/template.js}"></script>
+<script th:src="@{js/dashboard.js}"></script>
+<script th:src="@{js/calendar.js}"></script>
+
+</body>
+</html>

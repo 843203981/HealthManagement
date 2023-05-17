@@ -3,7 +3,7 @@ package com.devotion.healthmanagement.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.devotion.healthmanagement.entity.UserHealth;
+import com.devotion.healthmanagement.entity.Health;
 import com.devotion.healthmanagement.service.HealthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +29,9 @@ public class HealthController {
     public String toHealthPage(Model model, HttpServletRequest request){
         HttpSession session = request.getSession();
         //Page对象
-        Page<UserHealth> page = new Page<>(1, 5);
-        IPage<UserHealth> iPage = healthService.page(page);
-        QueryWrapper<UserHealth> wrapper = new QueryWrapper<>();
+        Page<Health> page = new Page<>(1, 5);
+        IPage<Health> iPage = healthService.page(page);
+        QueryWrapper<Health> wrapper = new QueryWrapper<>();
         wrapper.eq("id",session.getAttribute("id")).orderByDesc("update_time");
         model.addAttribute("userHealth",healthService.list(wrapper));
         log.info("healthService.list(wrapper)");
@@ -40,7 +40,7 @@ public class HealthController {
 
     @ResponseBody
     @PostMapping("/add")
-    public String addHealth(UserHealth userHealth){
+    public String addHealth(Health userHealth){
         log.info(userHealth.toString());
         if(healthService.save(userHealth)){
             return "{\"msg\":\"添加成功\"}";

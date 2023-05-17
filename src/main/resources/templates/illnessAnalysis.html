@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+
+    <title>Health -饮食记录</title>
+
+    <!-- Vendors Style-->
+    <link rel="stylesheet" th:href="@{css/vendors_css.css}">
+
+    <!-- Style-->
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/skin_color.css}">
+</head>
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+
+<div class="wrapper" id="page">
+    <div id="loader"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="page-title">疾病风险评估</h3>
+                <div class="d-inline-block align-items-center">
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                            <li class="breadcrumb-item" aria-current="page">分析评估</li>
+                            <li class="breadcrumb-item active" aria-current="page">疾病风险评估</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Main content -->
+        <div class="container col-12">
+            <div class="row">
+                <div class="box col-12">
+                    <div class="box-header with-border">
+                        <h4 class="box-title text-info" ><i class="ti-user mr-15"></i><span th:text="${session.name}"></span> </h4>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <tr>
+                                    <th>序号</th>
+                                    <th>时间</th>
+                                    <th>温度(°C)</th>
+                                    <th>心率(BPM)</th>
+                                    <th>血压(收缩压kPa)</th>
+                                    <th>血压(舒张压kPa)</th>
+                                    <th>血糖(mmol/L)</th>
+                                    <th>体脂率(%)</th>
+                                </tr>
+                                <tr>
+                                    <td th:text="${user.id}"> </td>
+                                    <td th:text="${user.updateTime}"> </td>
+                                    <td th:text="${user.temperature}" th:classappend="${(user.temperature > health.tempTop) ? 'bg-warning' : ''} + ${(user.temperature < health.tempBtm) ? 'bg-warning' : ''}"> </td>
+                                    <td th:text="${user.heartRate}" th:classappend="${user.heartRate > health.hrtrateTop ? 'bg-warning' : ''} + ${user.heartRate < health.hrtrateBtm ? 'bg-warning' : ''}"></td>
+                                    <td th:text="${user.highPressure}" th:classappend="${user.highPressure > health.highPressureTop ? 'bg-danger' : ''} + ${user.highPressure < health.highPressureBtm ? 'bg-danger' : ''}"></td>
+                                    <td th:text="${user.lowPressure}" th:classappend="${user.lowPressure > health.lowPressureTop ? 'bg-danger' : ''} + ${user.lowPressure < health.lowPressureBtm ? 'bg-danger' : ''}"></td>
+                                    <td th:text="${user.bloodGlucose}" th:classappend="${user.bloodGlucose > health.bldsugarTop ? 'bg-danger' : ''} + ${user.bloodGlucose < health.bldsugarBtm ? 'bg-danger' : ''}"></td>
+                                    <td th:text="${user.bloodFat}" th:classappend="${user.bloodFat > health.fatTop ? 'bg-warning' : ''} + ${user.bloodFat < health.fatBtm ? 'bg-success' : ''}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+
+                </div>
+                <div class="row col-md-12">
+                <div class="col-md-4" th:each="msg, iterStat:${msgList}">
+                    <div class="box box-solid " th:classappend="${msg.head}">
+                        <div class="box-header">
+                            <h4 class="box-title"><strong>[[${msg.name}]]</strong></h4>
+                        </div>
+                        <div class="box-body">
+                            <p th:text="'信息：' + ${msg.info}"></p>
+                            <p th:text="'建议：' + ${msg.advice}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <!-- /.row -->
+        </div>
+    </section>
+
+</div>
+
+
+
+
+<!-- Vendor JS -->
+<script th:src="@{js/vendors.min.js}"></script>
+<script th:src="@{js/feather.min.js}"></script>
+<script th:src="@{js/apexcharts.js}"></script>
+<script th:src="@{js/moment.min.js}"></script>
+<script th:src="@{js/fullcalendar.js}"></script>
+
+<!-- EduAdmin App -->
+<script th:src="@{js/template.js}"></script>
+<script th:src="@{js/dashboard.js}"></script>
+<script th:src="@{js/calendar.js}"></script>
+
+</body>
+</html>

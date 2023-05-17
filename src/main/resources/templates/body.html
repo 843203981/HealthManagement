@@ -65,20 +65,29 @@
                                             <th>时间</th>
                                             <th>身高(cm)</th>
                                             <th>体重(kg)</th>
+                                            <th>年龄</th>
+                                            <th>性别</th>
                                             <th>BMI指数</th>
                                         </tr>
-                                        <tr id="add-input" class="add1" th:each="user, iterStat:${userBody}" style="display: none">
-                                            <td id="id-input" th:text="${user.id}"> </td>
+                                        <tr id="add-input" class="add1" style="display: none">
+                                            <td id="id-input" th:text="${session.id}"> </td>
                                             <td><input  class="form-control" id="time-input" type="datetime-local"></td>
                                             <td><input  class="form-control" id="1" name="1"></td>
                                             <td><input  class="form-control" id="2" name="2"></td>
                                             <td><input  class="form-control" id="3" name="3"></td>
+                                            <td><select class="form-control select2" id="4" style="width: 100%;">
+                                                <option>男</option>
+                                                <option>女</option>
+                                            </select></td>
+                                            <td><input  class="form-control" id="5" name="5"></td>
                                         </tr>
                                         <tr th:each="user, iterStat:${userBody}">
                                             <td th:text="${user.id}"> </td>
                                             <td th:text="${user.updateTime}"> </td>
                                             <td th:text="${user.height}"> </td>
                                             <td th:text="${user.weight}"> </td>
+                                            <td th:text="${user.age}"> </td>
+                                            <td th:text="${user.sex}"></td>
                                             <td th:text="${user.bmi}"> </td>
                                         </tr>
                                     </table>
@@ -108,13 +117,17 @@
     }
 
     function commit() {
+            var myselect=document.getElementById("4");
+            var index = myselect.selectedIndex;// selectedIndex是所选中的项的index
         var i = document.getElementById('id-input').innerText;
         var a = document.getElementById('1').value;
         var b = document.getElementById('2').value;
         var c = document.getElementById('3').value;
+        var d = myselect.options[index].value;
+        var e = document.getElementById('5').value;
         var f = document.getElementById('time-input').value;
-        if(!a && !b && !c  ){
-            alert("数据为空");
+        if(!a && !b && !c  && !d && !e){
+            alert("请填写完整信息");
         }else{
             if(!f){
                 f=formatDateTime(new Date(),'yyyy-MM-dd HH:mm:ss');
@@ -124,7 +137,9 @@
                 "updateTime": f,
                 "height":a,
                 "weight":b,
-                "bmi":c,
+                "age":c,
+                "sex":d,
+                "bmi":e,
                 };
             $.ajax({
                 url:"/body/add",
@@ -174,7 +189,7 @@
         var a = document.getElementById('1').value;
         var b = document.getElementById('2').value;
 
-        document.getElementById('3').value = parseInt(b/(a*a/10000));
+        document.getElementById('5').value = parseInt(b/(a*a/10000));
 
     }
     document.getElementById('add-icon').addEventListener("click",open);

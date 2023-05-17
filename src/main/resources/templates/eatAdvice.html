@@ -26,13 +26,13 @@
     <div class="content-header">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
-                <h3 class="page-title">运动分析</h3>
+                <h3 class="page-title">健康饮食建议</h3>
                 <div class="d-inline-block align-items-center">
                     <nav>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
-                            <li class="breadcrumb-item" aria-current="page">分析评估</li>
-                            <li class="breadcrumb-item active" aria-current="page">运动分析</li>
+                            <li class="breadcrumb-item" aria-current="page">健康贴士</li>
+                            <li class="breadcrumb-item active" aria-current="page">健康饮食建议</li>
                         </ol>
                     </nav>
                 </div>
@@ -42,67 +42,17 @@
     </div>
 
     <!-- Main content -->
-    <section class="content box">
-
-        <!-- Main content -->
-        <div class="container col-12">
-            <div class="row">
-                <div class="col-3"></div>
-                <div class="col-6" id="content1" style="height: 600px;"></div>
+    <section class="content">
+        <div class="row">
+            <div class="box col-md-3" th:each="info:${infoList}"
+                 th:classappend="${(info.infoId % 6 == 0) ? 'box-outline-secondary' : ''} + ${(info.infoId % 6 == 1) ? 'box-outline-primary' : ''} +
+                 ${(info.infoId % 6 == 2) ? 'box-outline-success' : ''} + ${(info.infoId % 6 == 3) ? 'box-outline-info' : ''} + ${(info.infoId % 6 == 4) ? 'box-outline-warning' : ''} + ${(info.infoId % 6 == 5) ? 'box-outline-danger' : ''}"
+                  style="margin:15px 25px">
+                <div class="box-body">[[${info.info}]] </div>
             </div>
         </div>
-        <!-- /.row -->
     </section>
-
 </div>
-
-<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
-<script type="text/javascript" th:inline="javascript">
-    var costData = [[${costs}]];
-    var dateData = [[${dates}]];
-
-    var dom = document.getElementById('content1');
-    var myChart = echarts.init(dom, null, {
-        renderer: 'canvas',
-        useDirtyRect: false
-    });
-    var app = {};
-
-    var option;
-
-    option = {
-        color:['#FFA500'],
-        title: {
-            text: '运动消耗热量',
-            subtext: '单位：千卡',
-            left: 'center'
-        },
-        label: {
-            show: true,
-            position: 'top'
-        },
-        xAxis: {
-            type: 'category',
-            data: dateData
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                data: costData,
-                type: 'line'
-            }
-        ]
-    };
-
-    if (option && typeof option === 'object') {
-        myChart.setOption(option);
-    }
-
-    window.addEventListener('resize', myChart.resize);
-</script>
-
 
 
 <!-- Vendor JS -->

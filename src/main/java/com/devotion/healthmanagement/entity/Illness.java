@@ -20,8 +20,8 @@ public class Illness {
     private Integer highPressureBtm;
     private Integer lowPressureTop;
     private Integer lowPressureBtm;
-    private Integer fatTop;
-    private Integer fatBtm;
+    private Float fatTop;
+    private Float fatBtm;
     private Integer bldsugarTop;
     private Integer bldsugarBtm;
 

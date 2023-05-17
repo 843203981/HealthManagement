@@ -1,6 +1,7 @@
 package com.devotion.healthmanagement.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.devotion.healthmanagement.entity.Body;
 import com.devotion.healthmanagement.entity.Food;
 import com.devotion.healthmanagement.entity.dto.UserFood;
 
@@ -12,4 +13,10 @@ public interface FoodService extends IService<Food>{
     Food match(String foodName);
 
     void saveUserFoods(List<UserFood> userFoods);
+
+    UserFood getUserFoodDate(List<UserFood> userFoods);
+
+    List<List<UserFood>> partList(List<UserFood> userFoods);
+
+    UserFood getUserFoodCount(Body body);
 }

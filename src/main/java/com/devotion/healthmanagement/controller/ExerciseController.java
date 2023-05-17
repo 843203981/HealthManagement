@@ -22,6 +22,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
+@RequestMapping("/exercise")
 public class ExerciseController {
 
     @Autowired
@@ -29,7 +30,7 @@ public class ExerciseController {
 
     @Autowired
     DateUtil dateUtil;
-    @GetMapping("/exercise")
+    @GetMapping("")
     public String toExercisePage(Model model, HttpServletRequest request){
         Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
         Date date= new Date();
@@ -92,7 +93,7 @@ public class ExerciseController {
     }
 
     @ResponseBody
-    @PostMapping("/exercise/add")
+    @PostMapping("/add")
     public String addExercise(@RequestParam String sportName, Integer time, HttpServletRequest request){
 
         Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
@@ -111,29 +112,5 @@ public class ExerciseController {
         return "{\"msg\":\"添加成功\"}";
     }
 
-    @GetMapping("/exerciseAnalysis")
-    public String toExerciseAnalysisPage(Model model, HttpServletRequest request) throws ParseException {
-        Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
-        List<Integer> costs = new ArrayList<>();
-        List<String> dates = dateUtil.getSevenDate();
-        /*List<String> dateList = new ArrayList<>();*/
-        for (String date : dates) {
-            List<UserSport> userSports = sportService.list(id,date);
-            int cost = 0;
-            for (UserSport userSport : userSports) {
-                cost += userSport.getCost()*userSport.getTime();
-            }
-            costs.add(cost);
-            /*DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date1 = inputFormat.parse(date);
-            DateFormat outputFormat = new SimpleDateFormat("yyyy年MM月dd日");
-            date = outputFormat.format(date1);
-            dateList.add(date);*/
-        }
-        log.info(costs.toString());
-        log.info(dates.toString());
-        model.addAttribute("costs", costs);
-        model.addAttribute("dates", dates);
-        return "exerciseAnalysis";
-    }
+
 }

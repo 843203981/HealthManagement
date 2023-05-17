@@ -1,6 +1,8 @@
 package com.devotion.healthmanagement.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.devotion.healthmanagement.entity.Body;
 import com.devotion.healthmanagement.entity.Food;
 import com.devotion.healthmanagement.entity.dto.UserFood;
 import com.devotion.healthmanagement.service.BodyService;
@@ -20,6 +22,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
+@RequestMapping("/eat")
 public class EatController {
 
     @Autowired
@@ -31,79 +34,46 @@ public class EatController {
     @Autowired
     DateUtil dateUtil;
 
-    @GetMapping("/eat")
+    @GetMapping("")
     public String toEatPage(Model model, HttpServletRequest request){
         Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
         Date date= new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<UserFood> userFoods = foodService.list(id,sdf.format(date));
-        List<UserFood> userFoodsMorning = new ArrayList<>();
-        List<UserFood> userFoodsNoon = new ArrayList<>();
-        List<UserFood> userFoodsNight = new ArrayList<>();
-        int fats = 0;
-        int proteins = 0;
-        int carbons = 0;
-        int heats = 0;
-        Integer fatCount = bodyService.getById(id).getFatCount();
-        Integer proteinCount = bodyService.getById(id).getProteinCount();
-        Integer carbonCount = bodyService.getById(id).getCarbonCount();
+        List<Body> bodies = bodyService.list(new QueryWrapper<Body>().eq("id",id).orderByDesc("update_time"));
+        Body body = bodies.get(0);
 
-        for (UserFood userFood : userFoods) {
-            if(userFood.getFats()==null){
-                userFood.setFats(0);
-            }else {
-                fats += userFood.getFats();
-            }
-            if(userFood.getProteins()==null) {
-                userFood.setProteins(0);
-            }else {
-                proteins += userFood.getProteins();
-            }
-            if(userFood.getCarbons()==null) {
-                userFood.setCarbons(0);
-            }else {
-                carbons += userFood.getCarbons();
-            }
-            if(userFood.getHeat()==null){
-                userFood.setHeat(0);
-            }else{
-                heats += userFood.getHeat();
-            }
-            switch (userFood.getPart()){
-                case("早餐"):
-                    userFoodsMorning.add(userFood);
-                    break;
-                case("午餐"):
-                    userFoodsNoon.add(userFood);
-                    break;
-                case("晚餐"):
-                    userFoodsNight.add(userFood);
-                    break;
-            }
-        }
+        UserFood userFoodDay = foodService.getUserFoodDate(userFoods);
+        UserFood userFoodCount = foodService.getUserFoodCount(body);
+
+        List<List<UserFood>> userFoodsList = foodService.partList(userFoods);
+        List<UserFood> userFoodsMorning = userFoodsList.get(0);
+        List<UserFood> userFoodsNoon = userFoodsList.get(1);
+        List<UserFood> userFoodsNight = userFoodsList.get(2);
 
         log.info(userFoods.toString());
         log.info(userFoodsMorning.toString());
         log.info(userFoodsNoon.toString());
         log.info(userFoodsNight.toString());
-        log.info("fats:"+ fats +";proteins:"+ proteins +";carbons:"+ carbons);
-        log.info("fatCount:"+fatCount.toString()+";proteinCount:"+proteinCount.toString()+";carbonCount:"+carbonCount.toString());
+        log.info("heats"+userFoodDay.getHeat()+":fats:"+ userFoodDay.getFats() +";proteins:"+ userFoodDay.getProteins()+";carbons:"+userFoodDay.getCarbons());
+        log.info("heatCount"+userFoodCount.getHeat()+"fatCount:"+userFoodCount.getFats()+";proteinCount:"+userFoodCount.getProteins()+";carbonCount:"+userFoodCount.getCarbons());
         model.addAttribute("userFoodsMorning",userFoodsMorning);
         model.addAttribute("userFoodsNoon",userFoodsNoon);
         model.addAttribute("userFoodsNight",userFoodsNight);
-        model.addAttribute("fats",fats);
-        model.addAttribute("proteins",proteins);
-        model.addAttribute("carbons",carbons);
-        model.addAttribute("heats",heats);
-        model.addAttribute("fatCount",fatCount);
-        model.addAttribute("proteinCount",proteinCount);
-        model.addAttribute("carbonCount",carbonCount);
+        model.addAttribute("fats",userFoodDay.getFats());
+        model.addAttribute("proteins",userFoodDay.getProteins());
+        model.addAttribute("carbons",userFoodDay.getCarbons());
+        model.addAttribute("heats",userFoodDay.getHeat());
+        model.addAttribute("fatCount",userFoodCount.getFats());
+        model.addAttribute("proteinCount",userFoodCount.getProteins());
+        model.addAttribute("carbonCount",userFoodCount.getCarbons());
+        model.addAttribute("heatCount",userFoodCount.getHeat());
         model.addAttribute("foods",foodService.list());
         return "eat";
     }
 
     @ResponseBody
-    @PostMapping("/eat/add")
+    @PostMapping("/add")
     public String addUserFood(@RequestParam String part, String foodInput, HttpServletRequest request){
         String[] food = foodInput.split(",");
         List<UserFood> userFoods = new ArrayList<>();
@@ -129,50 +99,5 @@ public class EatController {
 
     }
 
-    @GetMapping("/eatAnalysis")
-    public String toAnalysisPage(Model model, HttpServletRequest request){
-        Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
-        List<String> dates = dateUtil.getSevenDate();
-        List<UserFood> userFoods = new ArrayList<>();
-        List<Integer> heatDates = new ArrayList<>();
-        List<Integer> fatDates = new ArrayList<>();
-        List<Integer> proteinDates = new ArrayList<>();
-        List<Integer> carbonDates = new ArrayList<>();
 
-        for (String date : dates) {
-            int heatDate = 0;
-            int fatDate = 0;
-            int proteinDate = 0;
-            int carbonDate = 0;
-            List<UserFood> userFoodDate = foodService.list(id,date);
-            for (UserFood userFood : userFoodDate) {
-                heatDate += userFood.getHeat();
-                fatDate += userFood.getFats();
-                proteinDate += userFood.getProteins();
-                carbonDate += userFood.getCarbons();
-            }
-            UserFood userFood = new UserFood();
-            userFood.setHeat(heatDate);
-            userFood.setFats(fatDate);
-            userFood.setProteins(proteinDate);
-            userFood.setCarbons(carbonDate);
-            userFood.setId(id);
-            userFood.setDate(date);
-            userFoods.add(userFood);
-        }
-        for (UserFood userFood : userFoods) {
-            heatDates.add(userFood.getHeat());
-            fatDates.add(userFood.getFats());
-            proteinDates.add(userFood.getProteins());
-            carbonDates.add(userFood.getCarbons());
-        }
-
-
-        model.addAttribute("heatDates",heatDates);
-        model.addAttribute("fatDates",fatDates);
-        model.addAttribute("proteinDates",proteinDates);
-        model.addAttribute("carbonDates",carbonDates);
-        model.addAttribute("dateList",dates);
-        return "eatAnalysis";
-    }
 }

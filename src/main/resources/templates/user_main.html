@@ -25,16 +25,19 @@
       <div class="box bg-primary-light">
         <div class="box-body d-flex px-0">
           <div class="flex-grow-1 p-30 flex-grow-1 bg-img dask-bg bg-none-md"
-               style="background-position: right bottom; background-size: auto 100%; background-image: url(image/custom-1.svg)">
+               style="background-position: right bottom; background-size: auto 100%; background-image: url(img/Yoga.svg)">
             <div class="row">
               <div class="col-12 col-xl-7">
                 <h2>欢迎回来, <strong><span th:text="${session.name}"></span></strong></h2>
 
-                <p class="text-dark my-10 font-size-16">
-                  Your students complated <strong class="text-warning">80%</strong> of the tasks.
+                <p class="text-dark my-10 font-size-16" th:if="${date}">
+                  上次您更新健康信息是在 <strong class="text-warning">[[${date}]]</strong>.
+                </p>
+                <p class="text-dark my-10 font-size-16" th:unless="${date}">
+                  您还未更新健康信息,快去更新吧.
                 </p>
                 <p class="text-dark my-10 font-size-16">
-                  Progress is <strong class="text-warning">very good!</strong>
+                  [[${msg}]]
                 </p>
               </div>
               <div class="col-12 col-xl-5"></div>
@@ -43,156 +46,99 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-12 col-xl-6">
-          <div class="box">
+
+        <div class="col-12 col-xl-6"  >
+          <div class="box" style="height: 90%">
             <div class="box-header with-border">
-              <h4 class="box-title">Students Progress </h4>
-              <ul class="box-controls pull-right d-md-flex d-none">
-                <li class="dropdown">
-                  <button class="btn btn-primary px-10 " data-toggle="dropdown" href="#">View
-                    List</button>
-                </li>
-              </ul>
+              <h4 class="box-title">饮食记录</h4>
             </div>
             <div class="box-body">
               <div class="d-flex align-items-center mb-30 gap-items-3 justify-content-between">
                 <div class="d-flex align-items-center font-weight-500">
                   <div class="mr-15 w-50 d-table">
-                    <img th:src="@{picture/avatar-1.png}"
-                         class="avatar avatar-lg rounded10 bg-primary-light" alt="">
+                    <img th:src="@{img/燃脂.svg}" class="avatar avatar-lg rounded10 bg-primary-light" alt="">
                   </div>
                   <div>
-                    <a href="#" class="text-dark hover-primary mb-5 d-block font-size-16">Amelia</a>
+                    <a href="#" class="text-dark hover-primary mb-5 d-block font-size-16">总热量</a>
                     <div class="w-200">
                       <div class="progress progress-sm mb-0">
-                        <div class="progress-bar progress-bar-primary progress-bar-striped progress-bar-animated"
-                             role="progressbar" aria-valuenow="75" aria-valuemin="0"
-                             aria-valuemax="100" style="width: 75%">
+                        <div class="progress-bar progress-bar-primary progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" th:style="'width:' + ${heatPercent} + '%'">
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="text-right">
-                  <h5 class="font-weight-600 mb-0 badge badge-pill badge-primary">75%</h5>
+                  <h5 class="font-weight-600 mb-0 badge badge-pill badge-primary" th:text="${heatPercent} + '%'"></h5>
                 </div>
               </div>
               <div class="d-flex align-items-center mb-30 gap-items-3 justify-content-between">
                 <div class="d-flex align-items-center font-weight-500">
                   <div class="mr-15 w-50 d-table">
-                    <img th:src="@{picture/avatar-2.png}"
-                         class="avatar avatar-lg rounded10 bg-primary-light" alt="">
+                    <img th:src="@{img/三明治.svg}" class="avatar avatar-lg rounded10 bg-primary-light" alt="">
                   </div>
                   <div>
-                    <a href="#" class="text-dark hover-primary mb-5 d-block font-size-16">Johen</a>
+                    <a href="#" class="text-dark hover-primary mb-5 d-block font-size-16">碳水</a>
                     <div class="w-200">
                       <div class="progress progress-sm mb-0">
-                        <div class="progress-bar progress-bar-warning progress-bar-striped progress-bar-animated"
-                             role="progressbar" aria-valuenow="64" aria-valuemin="0"
-                             aria-valuemax="100" style="width: 64%">
+                        <div class="progress-bar progress-bar-warning progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100" th:style="'width:' + ${carbonPercent} + '%'">
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="text-right">
-                  <h5 class="font-weight-600 mb-0 badge badge-pill badge-warning">64%</h5>
+                  <h5 class="font-weight-600 mb-0 badge badge-pill badge-warning" th:text="${carbonPercent} + '%'"></h5>
                 </div>
               </div>
               <div class="d-flex align-items-center mb-30 gap-items-3 justify-content-between">
                 <div class="d-flex align-items-center font-weight-500">
                   <div class="mr-15 w-50 d-table">
-                    <img th:src="@{picture/avatar-1.png}"
-                         class="avatar avatar-lg rounded10 bg-primary-light" alt="">
+                    <img th:src="@{img/鸡腿.svg}"  class="avatar avatar-lg rounded10 bg-primary-light" alt="">
                   </div>
                   <div>
-                    <a href="#"
-                       class="text-dark hover-primary mb-5 d-block font-size-16">Micheal</a>
+                    <a href="#" class="text-dark hover-primary mb-5 d-block font-size-16">蛋白质</a>
                     <div class="w-200">
                       <div class="progress progress-sm mb-0">
-                        <div class="progress-bar progress-bar-info progress-bar-striped progress-bar-animated"
-                             role="progressbar" aria-valuenow="59" aria-valuemin="0"
-                             aria-valuemax="100" style="width: 59%">
+                        <div class="progress-bar progress-bar-info progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="59" aria-valuemin="0" aria-valuemax="100" th:style="'width:' + ${proteinPercent} + '%'">
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="text-right">
-                  <h5 class="font-weight-600 mb-0 badge badge-pill badge-info">59%</h5>
+                  <h5 class="font-weight-600 mb-0 badge badge-pill badge-info" th:text="${proteinPercent} + '%'"></h5>
                 </div>
               </div>
               <div class="d-flex align-items-center mb-30 gap-items-3 justify-content-between">
                 <div class="d-flex align-items-center font-weight-500">
                   <div class="mr-15 w-50 d-table">
-                    <img th:src="@{picture/avatar-1.png}"
-                         class="avatar avatar-lg rounded10 bg-primary-light" alt="">
+                    <img th:src="@{img/五花肉.svg}" class="avatar avatar-lg rounded10 bg-primary-light" alt="">
                   </div>
                   <div>
-                    <a href="#" class="text-dark hover-primary mb-5 d-block font-size-16">Amanda</a>
+                    <a href="#" class="text-dark hover-primary mb-5 d-block font-size-16">脂肪</a>
                     <div class="w-200">
                       <div class="progress progress-sm mb-0">
-                        <div class="progress-bar progress-bar-danger progress-bar-striped progress-bar-animated"
-                             role="progressbar" aria-valuenow="45" aria-valuemin="0"
-                             aria-valuemax="100" style="width: 45%">
+                        <div class="progress-bar progress-bar-danger progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" th:style="'width:' + ${fatPercent} + '%'">
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="text-right">
-                  <h5 class="font-weight-600 mb-0 badge badge-pill badge-danger">45%</h5>
-                </div>
-              </div>
-              <div class="d-flex align-items-center gap-items-3 justify-content-between">
-                <div class="d-flex align-items-center font-weight-500">
-                  <div class="mr-15 w-50 d-table">
-                    <img th:src="@{picture/avatar-1.png}"
-                         class="avatar avatar-lg rounded10 bg-primary-light" alt="">
-                  </div>
-                  <div>
-                    <a href="#" class="text-dark hover-primary mb-5 d-block font-size-16">Tyler</a>
-                    <div class="w-200">
-                      <div class="progress progress-sm mb-0">
-                        <div class="progress-bar progress-bar-primary progress-bar-striped progress-bar-animated"
-                             role="progressbar" aria-valuenow="20" aria-valuemin="0"
-                             aria-valuemax="100" style="width: 20%">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="text-right">
-                  <h5 class="font-weight-600 mb-0 badge badge-pill badge-primary">20%</h5>
+                  <h5 class="font-weight-600 mb-0 badge badge-pill badge-danger" th:text="${fatPercent} + '%'"></h5>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="col-12 col-xl-6">
-          <div class="box">
+          <div class="box"  style="height: 90%">
             <div class="box-header with-border">
-              <h4 class="box-title">Working Hours</h4>
-              <ul class="box-controls pull-right d-md-flex d-none">
-                <li class="dropdown">
-                  <button class="dropdown-toggle btn btn-warning-light px-10" data-toggle="dropdown"
-                          href="#">Today</button>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item active" href="#">Today</a>
-                    <a class="dropdown-item" href="#">Yesterday</a>
-                    <a class="dropdown-item" href="#">Last week</a>
-                    <a class="dropdown-item" href="#">Last month</a>
-                  </div>
-                </li>
-              </ul>
+              <h4 class="box-title">热量消耗</h4>
             </div>
             <div class="box-body">
-              <div id="revenue5" class="min-h-325"></div>
-              <div class="d-flex justify-content-center">
-                <p class="d-flex align-items-center font-weight-600 mx-20"><span
-                        class="badge badge-xl badge-dot badge-warning mr-20"></span> Progress</p>
-                <p class="d-flex align-items-center font-weight-600 mx-20"><span
-                        class="badge badge-xl badge-dot badge-primary mr-20"></span> Done</p>
+              <div class="d-flex justify-content-center" id="container" style="height: 100%">
               </div>
             </div>
           </div>
@@ -205,13 +151,12 @@
               <div class="flex-grow-1 bg-danger p-30 flex-grow-1 bg-img"
                    style="background-position: calc(100% + 0.5rem) bottom; background-size: auto 100%; background-image: url(image/custom-3.svg)">
 
-                <h4 class="font-weight-400">User Activity</h4>
+                <h4 class="font-weight-400">健康知识</h4>
 
                 <p class="my-10 font-size-16">
-                  Grow marketing &amp; sales<br>through product.
+                  了解健康知识<br>改变生活.
                 </p>
-
-                <a href="#" class="btn btn-danger-light">Read More</a>
+                <a href="/healthNote" class="btn btn-danger-light">开始阅读</a>
               </div>
             </div>
           </div>
@@ -222,25 +167,25 @@
               <div class="flex-grow-1 bg-primary p-30 flex-grow-1 bg-img"
                    style="background-position: calc(100% + 0.5rem) bottom; background-size: auto 100%; background-image: url(image/custom-4.svg)">
 
-                <h4 class="font-weight-400">Based On</h4>
+                <h4 class="font-weight-400">健康贴士</h4>
 
                 <div class="mt-5">
                   <div class="d-flex mb-10 font-size-16">
                                         <span class="icon-Arrow-right mt-5 mr-10"><span class="path1"></span><span
                                                 class="path2"></span></span>
-                    <span class="text-white">Activities</span>
+                    <span class="text-white" >健康生活建议</span>
                   </div>
 
                   <div class="d-flex mb-10 font-size-16">
                                         <span class="icon-Arrow-right mt-5 mr-10"><span class="path1"></span><span
                                                 class="path2"></span></span>
-                    <span class="text-white">Sales</span>
+                    <span class="text-white" href="/eatAdvice">健康饮食建议</span>
                   </div>
 
                   <div class="d-flex mb-10 font-size-16">
                                         <span class="icon-Arrow-right mt-5 mr-10"><span class="path1"></span><span
                                                 class="path2"></span></span>
-                    <span class="text-white">Releases</span>
+                    <span class="text-white" href="/illAdvice">疾病预防建议</span>
                   </div>
                 </div>
               </div>
@@ -248,118 +193,26 @@
           </div>
         </div>
       </div>
-      <div class="box bg-transparent no-shadow mb-0">
-        <div class="box-header no-border">
-          <h4 class="box-title">Media Files</h4>
-          <div class="box-controls pull-right d-md-flex d-none">
-            <a href="#">View All</a>
-          </div>
-        </div>
-      </div>
-      <div class="box">
-        <div class="box-body py-0">
-          <div class="table-responsive">
-            <table class="table no-border mb-0">
-              <tbody>
-              <tr>
-                <td>
-                  <div class="bg-danger h-50 w-50 l-h-50 rounded text-center">
-                    <p class="mb-0 font-size-20 font-weight-600">A1</p>
-                  </div>
-                </td>
-                <td class="font-weight-600">Biology Course</td>
-                <td class="text-fade">StarterReplacement.pdf</td>
-                <td class="font-weight-500"><span
-                        class="badge badge-sm badge-dot badge-warning mr-10"></span>Only view</td>
-                <td class="text-fade">78 members</td>
-                <td class="font-weight-600">47 MB</td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="bg-info h-50 w-50 l-h-50 rounded text-center">
-                    <p class="mb-0 font-size-20 font-weight-600">B1</p>
-                  </div>
-                </td>
-                <td class="font-weight-600">Contemporary Art</td>
-                <td class="text-fade">Loremipsum.doc</td>
-                <td class="font-weight-500 text-warning"><span
-                        class="badge badge-sm badge-dot badge-warning mr-10"></span>Edit available
-                </td>
-                <td class="text-fade">78 members</td>
-                <td class="font-weight-600">78 MB</td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="bg-primary h-50 w-50 l-h-50 rounded text-center">
-                    <p class="mb-0 font-size-20 font-weight-600">C1</p>
-                  </div>
-                </td>
-                <td class="font-weight-600">Programming Language</td>
-                <td class="text-fade">phpcore.mp3</td>
-                <td class="font-weight-500"><span
-                        class="badge badge-sm badge-dot badge-primary mr-10"></span>Only view</td>
-                <td class="text-fade">48 members</td>
-                <td class="font-weight-600">12 MB</td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="bg-success h-50 w-50 l-h-50 rounded text-center">
-                    <p class="mb-0 font-size-20 font-weight-600">A2</p>
-                  </div>
-                </td>
-                <td class="font-weight-600">Geometry Course</td>
-                <td class="text-fade">dummyabz.pdf</td>
-                <td class="font-weight-500"><span
-                        class="badge badge-sm badge-dot badge-primary mr-10"></span>Only view</td>
-                <td class="text-fade">24 members</td>
-                <td class="font-weight-600">18 MB</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </div>
     <div class="col-xl-4 col-12">
       <div class="box">
         <div class="box-body">
-          <div class="box no-shadow mb-0">
-            <div class="box-body px-0 pt-0">
-              <div id="calendar" class="dask evt-cal min-h-400"></div>
-            </div>
-          </div>
-
           <div class="box no-shadow mb-0 px-10">
             <div class="box-header no-border">
-              <h4 class="box-title">Lessons</h4>
-              <div class="box-controls pull-right d-md-flex d-none">
-                <a href="#">View All</a>
-              </div>
+              <h4 class="box-title">选择喜爱的运动吧</h4>
             </div>
           </div>
           <div class="px-10">
-            <div class="box bt-5 border-danger rounded">
+            <div class="box bt-5 border-danger rounded" id="exercise1">
               <div class="box-body">
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-center pr-2 justify-content-between">
                     <h4 class="font-weight-500">
-                      Programming
+                      有氧城市慢跑
                     </h4>
-                    <div class="dropdown">
-                      <a data-toggle="dropdown" href="#" class="px-10 pt-5"><i
-                              class="ti-more-alt"></i></a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#"><i class="ti-import"></i> Import</a>
-                        <a class="dropdown-item" href="#"><i class="ti-export"></i> Export</a>
-                        <a class="dropdown-item" href="#"><i class="ti-printer"></i> Print</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#"><i class="ti-settings"></i>
-                          Settings</a>
-                      </div>
-                    </div>
                   </div>
                   <p class="font-size-16">
-                    Every Day 10am to 11am
+                    通过适度的持久性运动，促进健康、提高耐力，并带来身心愉悦的效果。
                   </p>
                 </div>
                 <div class="d-flex align-items-center justify-content-between mt-10">
@@ -378,32 +231,20 @@
                     </a>
                   </div>
                   <button type="button" class="waves-effect waves-circle btn btn-circle btn-dark"><i
-                          class="mdi mdi-plus"></i></button>
+                          class="mdi mdi-arrow-right"></i></button>
                 </div>
               </div>
             </div>
-            <div class="box bt-5 border-primary rounded">
+            <div class="box bt-5 border-primary rounded" id="exercise2">
               <div class="box-body">
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-center pr-2 justify-content-between">
                     <h4 class="font-weight-500">
-                      Core Language
+                      平板支撑
                     </h4>
-                    <div class="dropdown">
-                      <a data-toggle="dropdown" href="#" class="px-10 pt-5"><i
-                              class="ti-more-alt"></i></a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#"><i class="ti-import"></i> Import</a>
-                        <a class="dropdown-item" href="#"><i class="ti-export"></i> Export</a>
-                        <a class="dropdown-item" href="#"><i class="ti-printer"></i> Print</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#"><i class="ti-settings"></i>
-                          Settings</a>
-                      </div>
-                    </div>
                   </div>
                   <p class="font-size-16">
-                    Every Day 12pm to 01pm
+                    通过保持身体平直的姿势，锻炼核心肌群，提高核心稳定性和身体力量。
                   </p>
                 </div>
                 <div class="d-flex align-items-center justify-content-between mt-10">
@@ -422,84 +263,12 @@
                     </a>
                   </div>
                   <button type="button" class="waves-effect waves-circle btn btn-circle btn-dark"><i
-                          class="mdi mdi-plus"></i></button>
+                          class="mdi mdi-arrow-right"></i></button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="box no-shadow mb-0 px-10">
-            <div class="box-header no-border">
-              <h4 class="box-title">Lessons</h4>
-              <div class="box-controls pull-right d-md-flex d-none">
-                <a href="#">View All</a>
-              </div>
-            </div>
-          </div>
-          <div class="px-10">
-            <div class="box mb-15">
-              <div class="box-body">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <div class="mr-15 bg-warning h-50 w-50 l-h-60 rounded text-center">
-                                            <span class="icon-Book-open font-size-24"><span class="path1"></span><span
-                                                    class="path2"></span></span>
-                    </div>
-                    <div class="d-flex flex-column font-weight-500">
-                      <a href="#" class="text-dark hover-primary mb-1 font-size-16">Informatic
-                        Course</a>
-                      <span class="text-fade">Johen Doe, 19 April</span>
-                    </div>
-                  </div>
-                  <a href="#">
-                                        <span class="icon-Arrow-right font-size-24"><span class="path1"></span><span
-                                                class="path2"></span></span>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="box mb-15">
-              <div class="box-body">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <div class="mr-15 bg-primary h-50 w-50 l-h-60 rounded text-center">
-                      <span class="icon-Mail font-size-24"></span>
-                    </div>
-                    <div class="d-flex flex-column font-weight-500">
-                      <a href="#" class="text-dark hover-primary mb-1 font-size-16">Live
-                        Drawing</a>
-                      <span class="text-fade">Micak Doe, 12 June</span>
-                    </div>
-                  </div>
-                  <a href="#">
-                                        <span class="icon-Arrow-right font-size-24"><span class="path1"></span><span
-                                                class="path2"></span></span>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="box mb-0">
-              <div class="box-body">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center">
-                    <div class="mr-15 bg-danger h-50 w-50 l-h-60 rounded text-center">
-                                            <span class="icon-Book-open font-size-24"><span class="path1"></span><span
-                                                    class="path2"></span></span>
-                    </div>
-                    <div class="d-flex flex-column font-weight-500">
-                      <a href="#" class="text-dark hover-primary mb-1 font-size-16">Contemporary
-                        Art</a>
-                      <span class="text-fade">Potar doe, 27 July</span>
-                    </div>
-                  </div>
-                  <a href="#">
-                                        <span class="icon-Arrow-right font-size-24"><span class="path1"></span><span
-                                                class="path2"></span></span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
 
         </div>
       </div>
@@ -507,8 +276,80 @@
 
   </div>
   <!-- /.content -->
-</div>
-</div>
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+
+  <script type="text/javascript" th:inline="javascript">
+    document.getElementById("exercise1").onclick = function () {
+      window.location.href = "/exercise";
+    };
+    document.getElementById("exercise2").onclick = function () {
+      window.location.href = "/exercise";
+    };
+
+    var dom = document.getElementById('container');
+    var myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    option = {
+      color:['#265fb8','#ffa841'],
+      tooltip: {
+        trigger: 'item'
+      },
+      legend: {
+        top: '90%',
+        left: 'center',
+        icon: "circle", // 修改形状
+        itemHeight: 20, // 修改icon图形大小
+        itemGap: 40, // 修改间距
+        textStyle: {
+          fontSize: 20,
+        },
+      },
+      series: [
+        {
+          name: 'Access From',
+          type: 'pie',
+          radius: ['70%', '80%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 2
+          },
+          label: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: 40,
+              fontWeight: 'bold',
+              formatter:'{d}%'
+            }
+          },
+          labelLine: {
+            show: false
+          },
+          data: [
+            { value: [[${cost}]], name: '已完成' },
+            { value: 2000-[[${cost}]], name: '未完成' },
+          ]
+        }
+      ]
+    };
+
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+  </script>
 
 
 

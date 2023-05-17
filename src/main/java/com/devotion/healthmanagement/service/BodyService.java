@@ -1,7 +1,7 @@
 package com.devotion.healthmanagement.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.devotion.healthmanagement.entity.UserBody;
+import com.devotion.healthmanagement.entity.Body;
 
-public interface BodyService extends IService<UserBody> {
+public interface BodyService extends IService<Body> {
 }

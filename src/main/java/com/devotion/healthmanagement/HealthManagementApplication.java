@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 @SpringBootApplication
 @MapperScan("com.devotion.healthmanagement.mapper")
 public class HealthManagementApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(HealthManagementApplication.class, args);
         log.info("项目启动成功");
