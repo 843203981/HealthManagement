@@ -165,12 +165,12 @@
                 "bloodGlucose":e,
                 "bloodFat":g,};
             $.ajax({
-                url:"/health/add",
+                url:"/health/update",
                 type:"POST",
                 data:data,
                 dataType:"JSON",
                 success:function (json) {
-                    alert(json.msg);
+                    alert(json.info);
                     window.location.reload();
                 },
                 error:function (xhr) {

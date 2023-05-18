@@ -4,4 +4,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.devotion.healthmanagement.entity.Health;
 
 public interface HealthService extends IService<Health> {
+    boolean saveUpdate(Health userHealth);
 }

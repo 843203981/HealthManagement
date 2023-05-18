@@ -28,7 +28,7 @@
                 <span class="icon-Align-left"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
             </a>
             <!-- Logo -->
-            <a th:href="@{/}"  class="logo">
+            <a th:href="@{/admin}"  class="logo">
                 <!-- logo-->
                 <div class="logo-lg">
                     <span class="light-logo"><img th:src="@{picture/logo.png}" alt="logo"></span>
@@ -82,25 +82,23 @@
                 <div class="multinav-scroll" style="height: 100%;">
                     <!-- 左侧边栏 sidebar menu-->
                     <ul class="sidebar-menu" data-widget="tree">
-                        <li class="header">个人健康信息 </li>
-                        <li class="treeview" id="健康信息">
-                            <a href="#">
+                        <li class="header">账号管理 </li>
+                        <li class="treeview" id="用户账号">
+                            <a href="/user" target="content-frame">
                                 <i class="icon-Layout-4-blocks"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
-                                <span>健康档案</span>
+                                <span>用户账号</span>
                                 <span class="pull-right-container">
 					  <i class="fa fa-angle-right pull-right"></i>
 					</span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="/health" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>健康信息</a></li>
-                                <li><a href="/body" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>身体数据</a></li>
-                                <li><a href="/illness" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>病例记录</a></li>
+                                <li><a href="/userAdmin" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>用户账号管理</a></li>
                             </ul>
                         </li>
                         <li class="treeview" id="个人信息">
                             <a href="#">
                                 <i class="icon-User"><span class="path1"></span><span class="path2"></span></i>
-                                <span>个人信息</span>
+                                <span>个人账号</span>
                                 <span class="pull-right-container">
 					  <i class="fa fa-angle-right pull-right"></i>
 					</span>
@@ -110,61 +108,64 @@
                                 <li><a href="/password" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>更改密码</a></li>
                             </ul>
                         </li>
-                        <li class="header">健康状态评估 </li>
+                        <li class="header">实体数据管理 </li>
                         <li class="treeview" id="日常记录">
                             <a href="#">
                                 <i class="icon-Write"><span class="path1"></span><span class="path2"></span></i>
-                                <span>日常记录</span>
+                                <span>实体数据</span>
                                 <span class="pull-right-container">
 					  <i class="fa fa-angle-right pull-right"></i>
 					</span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="/exercise" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>运动记录</a></li>
-                                <li><a href="/eat" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>饮食记录</a></li>
+                                <li><a href="/foodAdmin" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>食物数据</a></li>
+                                <li><a href="/sportAdmin" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>运动数据</a></li>
+                                <li><a href="/illAdmin" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>疾病数据</a></li>
                             </ul>
                         </li>
                         <li class="treeview" id="图表分析">
                             <a href="#">
                                 <i class="icon-Chart-pie"><span class="path1"></span><span class="path2"></span></i>
-                                <span>分析评估</span>
+                                <span>记录数据</span>
                                 <span class="pull-right-container">
 					  <i class="fa fa-angle-right pull-right"></i>
 					</span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="/exerciseAnalysis" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>运动分析</a></li>
-                                <li><a href="/eatAnalysis" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>饮食分析</a></li>
-                                <li><a href="/illnessAnalysis" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>疾病风险评估</a></li>
-                                <li><a href="/healthAnalysis" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>健康指标评估</a></li>
+                                <li><a href="/bodyAdmin" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>身体记录</a></li>
+                                <li><a href="/healthAdmin" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>健康记录</a></li>
                             </ul>
-                        </li>
-                        <li class="header">健康生活贴士 </li>
-                        <li class="treeview" id="健康贴士">
+                        </li><!--
+                        <li class="header">关系记录管理 </li>
+                        <li class="treeview" id="关系数据">
                             <a href="#">
                                 <i class="icon-File"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
-                                <span>健康贴士</span>
+                                <span>关系记录</span>
                                 <span class="pull-right-container">
 					  <i class="fa fa-angle-right pull-right"></i>
 					</span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="/healthAdvice" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>健康生活建议</a></li>
-                                <li><a href="/eatAdvice" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>健康饮食建议</a></li>
-                                <li><a href="/illAdvice" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>疾病预防建议</a></li>
+                                <li><a href="/healthAdvice" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>饮食记录</a></li>
+                                <li><a href="/eatAdvice" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>运动记录</a></li>
+                                <li><a href="/illAdvice" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>疾病记录</a></li>
+
                             </ul>
-                        </li >
-                        <li class="treeview" id="健康知识">
+                        </li >-->
+                        <li class="header">知识数据管理 </li>
+                        <li class="treeview" id="健康贴士">
                             <a href="#">
-                                <i class="icon-Library"><span class="path1"></span><span class="path2"></span></i>
-                                <span>健康知识</span>
+                                <i class="icon-Library"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                                <span>知识管理</span>
                                 <span class="pull-right-container">
 					  <i class="fa fa-angle-right pull-right"></i>
 					</span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="/healthNote" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>健康生活知识</a></li>
-                                <li><a href="/illNote" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>疾病预防知识</a></li>
+                                <li><a href="/infoAdmin" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>知识管理</a></li>
+<!--
+                                <li><a href="/eatAdvice" target="content-frame"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>知识管理</a></li>
+-->
                             </ul>
                         </li >
                     </ul>
@@ -180,7 +181,7 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper col-12" >
-        <iframe class="container-full " name="content-frame" id="content-frame" style="position: fixed; width: 90%;height: 90%;border: medium none;" src="/userIndex">
+        <iframe class="container-full " name="content-frame" id="content-frame" style="position: fixed; width: 90%;height: 90%;border: medium none;" src="/adminIndex">
         </iframe>
     </div>
 

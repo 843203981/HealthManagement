@@ -8,4 +8,5 @@ public class Msg {
     String head;
     String info;
     String advice;
+    Object data;
 }

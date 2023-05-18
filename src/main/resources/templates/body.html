@@ -117,8 +117,8 @@
     }
 
     function commit() {
-            var myselect=document.getElementById("4");
-            var index = myselect.selectedIndex;// selectedIndex是所选中的项的index
+        var myselect=document.getElementById("4");
+        var index = myselect.selectedIndex;// selectedIndex是所选中的项的index
         var i = document.getElementById('id-input').innerText;
         var a = document.getElementById('1').value;
         var b = document.getElementById('2').value;
@@ -142,12 +142,12 @@
                 "bmi":e,
                 };
             $.ajax({
-                url:"/body/add",
+                url:"/body/update",
                 type:"POST",
                 data:data,
                 dataType:"JSON",
                 success:function (json) {
-                    alert(json.msg);
+                    alert(json.info);
                     window.location.reload();
                 },
                 error:function (xhr) {

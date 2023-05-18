@@ -48,15 +48,15 @@
                   <div class="box-header with-border">
                     <h4 class="box-title">账号信息</h4>
                   </div>
-                  <form class="form" action="/updateUser" method="post">
+                  <form class="form" >
                     <div class="box-body">
                       <h4 class="box-title text-info" ><i class="ti-user mr-15"></i><span th:text="${user.uname}"></span> </h4>
                       <hr class="my-15">
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group">
-                            <label>姓名</label>
-                            <input id="name" type="text" class="form-control" th:value="${user.name}" name="name" disabled>
+                            <label>id</label>
+                            <input id="id" type="text" class="form-control" th:value="${user.id}" name="id" disabled>
                           </div>
                         </div>
                         <div class="col-md-6">
@@ -69,8 +69,8 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group">
-                            <label>用户性别</label>
-                            <input id="sex" type="text" class="form-control" th:value="${user.sex}" name="sex" disabled>
+                            <label>姓名</label>
+                            <input id="name" type="text" class="form-control" th:value="${user.name}" name="name" disabled>
                           </div>
                         </div>
                         <div class="col-md-6">
@@ -86,8 +86,8 @@
                         <button type="button" class="btn btn-rounded btn-warning btn-outline mr-1" onclick="f()">
                           <i class="ti-pencil-alt" ></i> 修改
                         </button>
-                        <button type="submit" id="submit" class="btn btn-rounded btn-primary btn-outline" disabled>
-                          <i class="ti-save-alt"></i> 保存
+                        <button type="button" id="submit" class="btn btn-rounded btn-primary btn-outline" disabled>
+                          <i class="ti-save-alt" ></i> 保存
                         </button>
                       </div>
                     </div>
@@ -100,10 +100,36 @@
       </div>
 
 <script>
+  document.getElementById("submit").addEventListener("click", commit);
+  function commit() {
+    let id= document.getElementById("id").value;
+    let name= document.getElementById("name").value;
+    let uname= document.getElementById("uname").value;
+    let password= document.getElementById("password").value;
+    let data = {
+      "id":id,
+      "name":name,
+      "uname":uname,
+      "password":password
+    };
+
+    $.ajax({
+      url: "/user/update",
+      type: "POST",
+      data: data,
+      dataType: "json",
+      success: function (data) {
+          alert(data.info);
+          window.location.reload();
+      },
+      error: function (xhr) {
+        alert("未知错误" + xhr.message);
+      }
+    });
+  }
   function f(){
     document.getElementById("name").disabled = false;
     document.getElementById("uname").disabled = false;
-    document.getElementById("sex").disabled = false;
     document.getElementById("submit").disabled = false;
   }
 </script>

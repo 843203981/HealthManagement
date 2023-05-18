@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+
+    <title>Health -健康信息</title>
+
+    <!-- Vendors Style-->
+    <link rel="stylesheet" th:href="@{css/vendors_css.css}">
+
+    <!-- Style-->
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/skin_color.css}">
+
+
+</head>
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+
+<div class="wrapper">
+    <div id="loader"></div>
+    <!---------------------------------------------------------------------------------------------------------------------------------------------------->
+    <!-- Content Wrapper. Contains page content -->
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="page-title">身体管理</h3>
+                <div class="d-inline-block align-items-center">
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                            <li class="breadcrumb-item" aria-current="page">记录数据</li>
+                            <li class="breadcrumb-item active" aria-current="page">身体记录</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h4 class="box-title text-info" ><i class="ti-user mr-15"></i><span>身体记录表</span> </h4>
+                    <div class="box-controls pull-right">
+                        <div class="lookup lookup-circle lookup-right">
+                            <input type="text" id="searchInput" name="s">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>序号</th>
+                                <th>体重</th>
+                                <th>身高</th>
+                                <th>BMI</th>
+                                <th>年龄</th>
+                                <th>性别</th>
+                                <th>更新时间</th>
+                                <th>推荐热量摄入量</th>
+                                <th>推荐脂肪摄入量</th>
+                                <th>推荐蛋白质摄入量</th>
+                                <th>推荐碳水摄入量</th>
+                                <th>活动频率</th>
+                                <th>
+                                    <div class="row pull-left">
+                                        <div class="ti-plus" id="add-icon"></div>
+                                        <div class="ti-close" id="close-icon" style="display: none"></div>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr id="add-input" class="add1" style="display: none">
+                                <td><input class="form-control" id="1" name="id"></td>
+                                <td><input class="form-control" id="2" name="weight"></td>
+                                <td><input class="form-control" id="3" name="height"></td>
+                                <td><input class="form-control" id="4" name="bmi"></td>
+                                <td><input class="form-control" id="5" name="age"></td>
+                                <td><select class="form-control select2" id="6" style="width: 100%;">
+                                    <option>男</option>
+                                    <option>女</option>
+                                </select></td>
+                                <td><input class="form-control" id="7" name="updateTime"></td>
+                                <td><input class="form-control" id="8" name="heatCount"></td>
+                                <td><input class="form-control" id="9" name="fatCount"></td>
+                                <td><input class="form-control" id="10" name="proteinCount"></td>
+                                <td><input class="form-control" id="11" name="carbonCount"></td>
+                                <td><input class="form-control" id="12" name="intensity"></td>
+                                <td style="padding: 0">
+                                    <div class="pull-left">
+                                        <div class="ti-check" id="check-icon" style="display: none"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:each="body, iterStat:${bodies}">
+                                <td th:text="${body.id}"></td>
+                                <td th:text="${body.weight}"></td>
+                                <td th:text="${body.height}"></td>
+                                <td th:text="${body.bmi}"></td>
+                                <td th:text="${body.age}"></td>
+                                <td th:text="${body.sex}"></td>
+                                <td th:text="${body.updateTime}"></td>
+                                <td th:text="${body.heatCount}"></td>
+                                <td th:text="${body.fatCount}"></td>
+                                <td th:text="${body.proteinCount}"></td>
+                                <td th:text="${body.carbonCount}"></td>
+                                <td th:text="${body.intensity}"></td>
+                                <td>
+                                    <div class="row pull-left">
+                                        <div class="ti-pencil edit-icon" th:data-id="${body.id}"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="ti-trash delete-icon" th:data-id="${body.id}"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+
+
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    // 获取所有的编辑图标元素
+    var editIcons = document.querySelectorAll(".edit-icon");
+
+    // 为每个编辑图标元素添加点击事件处理程序
+    editIcons.forEach(function(icon) {
+        icon.addEventListener("click", function() {
+            // 获取被点击编辑图标所在行的数据
+            var row = this.closest("tr");
+            var rowData = Array.from(row.querySelectorAll("td")).map(function(td, index) {
+                return td.innerText;
+            });
+
+            // 将数据写入add-input中的对应元素
+            var addInput = document.getElementById("add-input");
+            var inputElements = addInput.querySelectorAll("input, select");
+            inputElements.forEach(function(input, index) {
+                input.value = rowData[index];
+            });
+
+            // 显示add-input行
+            addInput.style.display = "table-row";
+            var checkIcon = addInput.querySelector("#check-icon");
+            checkIcon.style.display = "block";
+
+            row.style.display = "none";
+        });
+    });
+
+    /*------------------------------------------------*/
+    // 获取搜索输入框元素
+    var searchInput = document.getElementById("searchInput");
+
+    // 添加键盘事件处理程序
+    searchInput.addEventListener("input", function(event) {
+        // 获取搜索词
+            var searchTerm = searchInput.value.trim();
+            // 调用查询函数，传入搜索词作为参数
+            Search(searchTerm);
+
+    });
+
+    // 查询函数的示例
+    function Search(searchTerm) {
+        // 在这里执行查询操作
+        console.log("执行查询，搜索词为：" + searchTerm);
+        $.ajax({
+            type: "POST",
+            url: "/body/select",
+            data: {
+                "words": searchTerm
+            },
+            success: function (data) {
+                if (data.info === "success") {
+                    updateTable(data.data);
+                } else {
+                    alert(data.info);
+                }
+            },
+            error: function () {
+                alert("请求失败");
+            }
+        });
+    }
+
+    function updateTable(bodies) {
+        // 获取表格元素
+        var table = document.querySelector(".table-hover");
+
+        // 清空表格内容
+        while (table.rows.length > 1) {
+            table.deleteRow(1);
+        }
+
+        // 重新填充表格
+        bodies.forEach(function (body) {
+            var newRow = table.insertRow(-1);
+            newRow.innerHTML = "<td>" + body.id + "</td>" +
+                "<td>" + body.weight + "</td>" +
+                "<td>" + body.height + "</td>" +
+                "<td>" + body.bmi + "</td>" +
+                "<td>" + body.age + "</td>" +
+                "<td>" + body.sex + "</td>" +
+                "<td>" + body.updateTime + "</td>" +
+                "<td>" + body.heatCount + "</td>" +
+                "<td>" + body.fatCount + "</td>" +
+                "<td>" + body.proteinCount + "</td>" +
+                "<td>" + body.carbonCount + "</td>" +
+                "<td>" + body.intensity + "</td>" +
+                "<td><div class='row pull-left'><div class='ti-pencil edit-icon' data-id='" + body.id + "'></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class='ti-trash delete-icon' data-id='" + body.id + "'></div></div></td>";
+        });
+    }
+
+    // 获取所有的删除图标元素
+    var deleteIcons = document.querySelectorAll(".delete-icon");
+
+    // 为每个删除图标元素添加点击事件处理程序
+    deleteIcons.forEach(function(icon) {
+        icon.addEventListener("click", function() {
+            // 获取被点击删除图标所在行的数据和ID
+            var row = this.closest("tr");
+            var id = this.getAttribute("data-id");
+            var updateTime = row.querySelector("td[data-name='updateTime']").innerText;
+            // 调用删除行数据的函数，并传入相应的数据和ID
+            deleteBody(id, updateTime);
+        });
+    });
+
+    // 删除行数据的函数
+    function deleteBody( id, updateTime) {
+        let data = {
+            "id": id,
+            "updateTime": updateTime
+        };
+        $.ajax({
+            url: "/body/delete",
+            type: "POST",
+            data: data,
+            dataType: "JSON",
+            success: function (json) {
+                alert(json.info);
+                // 重新加载页面示例：
+                window.location.reload();
+            },
+            error: function (xhr) {
+                alert("未知错误" + xhr.message);
+            }
+        });
+    }
+</script>
+
+<script th:inline="javascript">
+    function open() {
+        document.getElementById('add-icon').style.display = "none";
+        document.getElementById('check-icon').style.display = "";
+        document.getElementById('close-icon').style.display = "";
+        document.getElementById('add-input').style.display = "";
+    }
+    function close() {
+        document.getElementById('add-icon').style.display = "";
+        document.getElementById('check-icon').style.display = "none";
+        document.getElementById('close-icon').style.display = "none";
+        document.getElementById('add-input').style.display = "none";
+
+    }
+
+    function commit() {
+        var myselect=document.getElementById("6");
+        var index = myselect.selectedIndex;// selectedIndex是所选中的项的index
+        var f = myselect.options[index].value;
+        let a = document.getElementById('1').value;
+        let b = document.getElementById('2').value;
+        let c = document.getElementById('3').value;
+        let d = document.getElementById('4').value;
+        let e = document.getElementById('5').value;
+        let g = document.getElementById('7').value;
+        let h = document.getElementById('8').value;
+        let i = document.getElementById('9').value;
+        let j = document.getElementById('10').value;
+        let k = document.getElementById('11').value;
+        let l = document.getElementById('12').value;
+
+        var data = {
+            "id":a,
+            "weight":b,
+            "height":c,
+            "bmi":d,
+            "age":e,
+            "sex":f,
+            "updateTime":g,
+            "heatCount":h,
+            "fatCount":i,
+            "proteinCount":j,
+            "carbonCount":k,
+            "intensity":l
+        };
+
+        // Get the input values
+            $.ajax({
+                url:"/body/update",
+                type:"POST",
+                data:data,
+                dataType:"JSON",
+                success:function (json) {
+                    alert(json.info);
+                    window.location.reload();
+                },
+                error:function (xhr) {
+                    alert("未知错误"+xhr.message);
+                }
+            })
+
+
+    }
+
+
+    document.getElementById('add-icon').addEventListener("click",open);
+    document.getElementById('close-icon').addEventListener("click",close);
+    document.getElementById('check-icon').addEventListener("click",commit);
+
+</script>
+
+<!-- Vendor JS -->
+<script th:src="@{js/vendors.min.js}"></script>
+<script th:src="@{js/chat-popup.js}"></script>
+<script th:src="@{js/feather.min.js}"></script>
+
+<script th:src="@{js/apexcharts.js}"></script>
+<script th:src="@{js/moment.min.js}"></script>
+<script th:src="@{js/fullcalendar.js}"></script>
+
+<!-- EduAdmin App -->
+<script th:src="@{js/template.js}"></script>
+<script th:src="@{js/dashboard.js}"></script>
+<script th:src="@{js/calendar.js}"></script>
+
+</body>
+</html>

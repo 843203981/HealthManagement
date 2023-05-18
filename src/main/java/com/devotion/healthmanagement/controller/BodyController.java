@@ -2,15 +2,14 @@ package com.devotion.healthmanagement.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.devotion.healthmanagement.entity.Body;
+import com.devotion.healthmanagement.entity.Food;
+import com.devotion.healthmanagement.entity.dto.Msg;
 import com.devotion.healthmanagement.service.BodyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -35,24 +34,49 @@ public class BodyController {
     }
 
     @ResponseBody
-    @PostMapping("/add")
-    public String addHealth(Body userBody){
+    @PostMapping("/update")
+    public Msg addHealth(Body userBody){
+        Msg msg = new Msg();
         log.info(userBody.toString());
         //判空
         if(userBody.getSex()==null||userBody.getAge()==null||userBody.getHeight()==null||userBody.getWeight()==null){
-            return "{\"msg\":\"请填写完整数据\"}";
+            msg.setInfo("请填写完整信息");
+            return msg;
         }
-        if(bodyService.save(userBody)){
-            return "{\"msg\":\"添加成功\"}";
+        if(bodyService.saveUpdate(userBody)){
+            msg.setInfo("更新成功");
         }else{
-            return "{\"msg\":\"添加失败,请重试\"}";
+            msg.setInfo("更新失败");
         }
+        return msg;
+    }
 
+    @ResponseBody
+    @PostMapping("/delete")
+    public Msg deleteHealth(Body userBody){
+        Msg msg = new Msg();
+        log.info(userBody.toString());
+        if(bodyService.remove(new QueryWrapper<>(userBody).eq("id",userBody.getId()).eq("update_time",userBody.getUpdateTime()))){
+            msg.setInfo("删除成功");
+        }else{
+            msg.setInfo("删除失败");
+        }
+        return msg;
+    }
+
+    @ResponseBody
+    @PostMapping("/select")
+    public Msg selectHealth(@RequestParam String words){
+        Msg msg = new Msg();
+        List<Body> bodies = bodyService.list(new QueryWrapper<Body>().like("id",words).orderByDesc("update_time"));
+        msg.setInfo("success");
+        msg.setData(bodies);
+        return msg;
     }
 
     @ResponseBody
     @PostMapping("/intensity")
-    public String intensity(String intensity, Model model, HttpServletRequest request){
+    public Msg intensity(String intensity, Model model, HttpServletRequest request){
         Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
         Float intensity1 = Float.parseFloat(intensity);
         List<Body> bodies = bodyService.list(new QueryWrapper<Body>().eq("id",id).orderByDesc("update_time"));
@@ -70,7 +94,9 @@ public class BodyController {
         userBody.setCarbonCount((int) (userBody.getHeatCount()*0.5/4));
             bodyService.update(userBody,new QueryWrapper<Body>().eq("id",id).eq("update_time",userBody.getUpdateTime()));
         log.info(userBody.toString());
-        return "{\"msg\":\"添加成功\"}";
+        Msg msg = new Msg();
+        msg.setInfo("更新成功");
+        return msg;
     }
 
 }

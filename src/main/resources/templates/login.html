@@ -174,7 +174,7 @@
             <input type="password" placeholder="密码" name="password">
             <button type="button" id="bt">登录</button>
             <div class="control">
-                <span><a href="#">切换到管理登录</a></span>
+                <span><a>切换到管理登录</a></span>
             </div>
             <div class="register">
                 <span>没有帐号？<a href="/register">注册</a></span>
@@ -182,11 +182,12 @@
         </form><!--action="/login" method="post"-->
         <form  id="loginForm1" class="form-adminLogin disappear" >
             <h1>管理登录</h1>
+            <input type="hidden" th:value="${session.publicKey}" name="publicKey" id="publicKey1">
             <input type="text" placeholder="帐号" name="uname">
             <input type="password" placeholder="密码" name="password">
             <button type="button" id="bt1">登录</button>
             <div class="control">
-                <span><a href="#">切换到用户登录</a></span>
+                <span><a>切换到用户登录</a></span>
             </div>
 
         </form>
@@ -240,13 +241,45 @@
                 if(json.id === 0){
                     alert("账号或密码错误");
                 }else{
-                    alert("登录成功");
-                    location.href="/"
+                    if(json.admin === 0){
+                        alert("登录成功");
+                        location.href="/"
+                    }
+                    else{
+                        alert("您不是普通用户");
+                    }
                 }
             }
         });
     });
 
+    $("#bt1").click(function () {
+        let data = $("#loginForm1").serializeArray();
+        let publicKey = data[0].value;
+        let username = data[1].value;
+        let oldPwd = data[2].value;
+        let encrypt_Pwd = encrypt(publicKey, oldPwd);
+        let data1 = {"uname": username, "password": encrypt_Pwd};
+        $.ajax({
+            url: '/login',
+            type: 'POST',
+            data: data1,
+            dataType: 'JSON',
+            success: function (json) {
+                if(json.id === 0){
+                    alert("账号或密码错误");
+                }else{
+                    if(json.admin === 1){
+                        alert("登录成功");
+                        location.href="/admin"
+                    }
+                    else{
+                        alert("您没有管理权限");
+                    }
+                }
+            }
+        });
+    });
 
     // RSA前端加密
     function encrypt(key, oldPwd) {

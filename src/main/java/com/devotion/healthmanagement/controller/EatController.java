@@ -4,6 +4,7 @@ package com.devotion.healthmanagement.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.devotion.healthmanagement.entity.Body;
 import com.devotion.healthmanagement.entity.Food;
+import com.devotion.healthmanagement.entity.dto.Msg;
 import com.devotion.healthmanagement.entity.dto.UserFood;
 import com.devotion.healthmanagement.service.BodyService;
 import com.devotion.healthmanagement.service.FoodService;
@@ -74,7 +75,7 @@ public class EatController {
 
     @ResponseBody
     @PostMapping("/add")
-    public String addUserFood(@RequestParam String part, String foodInput, HttpServletRequest request){
+    public Msg addUserFood(@RequestParam String part, String foodInput, HttpServletRequest request){
         String[] food = foodInput.split(",");
         List<UserFood> userFoods = new ArrayList<>();
         for (String s : food) {
@@ -91,11 +92,11 @@ public class EatController {
             userFood.setFoodId(food1.getFoodId());
             userFood.setDate(sdf.format(new Date()));
             userFoods.add(userFood);
-
         }
         foodService.saveUserFoods(userFoods);
-
-        return "{\"msg\":\"添加成功\"}";
+        Msg msg = new Msg();
+        msg.setInfo("添加成功");
+        return msg;
 
     }
 

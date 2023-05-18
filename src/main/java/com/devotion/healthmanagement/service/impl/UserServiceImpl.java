@@ -65,6 +65,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         if (passwordCheck.equals(passwordLogin)) {
             redisUtil.set(unameLogin, userCheck, 1800);
             log.info("用户登录" + redisUtil.get(unameLogin));
+            userCheck.setPassword("");
         } else {
             userCheck.setId(0);
             userCheck.setUname("密码错误");

@@ -155,12 +155,12 @@
                 "illName":a,
                 "illRx":b,};
             $.ajax({
-                url:"/illness/add",
+                url:"/illness/addUserIllness",
                 type:"POST",
                 data:data,
                 dataType:"JSON",
                 success:function (json) {
-                    alert(json.msg);
+                    alert(json.info);
                     window.location.reload();
                 },
                 error:function (xhr) {
@@ -232,7 +232,7 @@
             processData: false,
             contentType: false,
             success:function (msg) {
-                alert(msg);
+                alert(msg.info);
                 location=location;
             },
             error:function (xhr) {

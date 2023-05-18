@@ -1,5 +1,8 @@
 package com.devotion.healthmanagement.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.devotion.healthmanagement.entity.Illness;
+import com.devotion.healthmanagement.entity.dto.Msg;
 import com.devotion.healthmanagement.entity.dto.UserIllness;
 import com.devotion.healthmanagement.service.IllnessService;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -41,20 +44,23 @@ public class IllnessController {
     }
 
     @ResponseBody
-    @PostMapping("/add")
-    public String getIllnessService(UserIllness userIllness){
+    @PostMapping("/updateUserIllness")
+    public Msg setIllnessService(UserIllness userIllness){
+        Msg msg = new Msg();
         log.info(userIllness.toString());
         if(illnessService.saveUserIllness(userIllness)){
-            return "{\"msg\":\"添加成功\"}";
+            msg.setInfo("添加成功");
         }else{
-            return "{\"msg\":\"添加失败,请重试\"}";
+            msg.setInfo("添加失败");
         }
+        return msg;
     }
 
 
     @ResponseBody
     @RequestMapping("/upload")
-    public String upload(@RequestParam("file1") MultipartFile file1) throws IOException, InvalidFormatException, org.apache.poi.openxml4j.exceptions.InvalidFormatException {
+    public Msg upload(@RequestParam("file1") MultipartFile file1) throws IOException, InvalidFormatException, org.apache.poi.openxml4j.exceptions.InvalidFormatException {
+        Msg msg = new Msg();
         Date dNow = new Date( );
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh_mm_ss");
         String time = ft.format(dNow);
@@ -66,6 +72,57 @@ public class IllnessController {
         file1.transferTo(file);
 
         illnessService.asyncUpload(file);
-        return "导入成功";
+        msg.setInfo("上传成功");
+        return msg;
+    }
+
+    @ResponseBody
+    @RequestMapping("/update")
+    public Msg update(Illness illness) {
+
+        log.info("更新疾病"+illness);
+        Msg msg = new Msg();
+        if(illness == null){
+            msg.setInfo("疾病不能为空");
+        }
+        if(illnessService.saveOrUpdate(illness)){
+            msg.setInfo("更新成功！");
+        }
+        else {
+            msg.setInfo("更新失败！");
+        }
+        return msg;
+    }
+
+    @ResponseBody
+    @RequestMapping("/delete")
+    public Msg delete(Illness illness) {
+
+        log.info("删除疾病"+illness);
+        Msg msg = new Msg();
+        if(illness.getIllId() == null){
+            msg.setInfo("疾病不能为空");
+            return msg;
+        }
+        if(illnessService.removeById(illness.getIllId())){
+            msg.setInfo("删除成功！");
+        }
+        else {
+            msg.setInfo("删除失败！");
+        }
+        return msg;
+    }
+
+
+    @ResponseBody
+    @PostMapping("/select")
+    public Msg selectIllness(@RequestParam String words){
+        log.info("查询疾病"+words);
+        Msg msg = new Msg();
+        List<Illness> illnesses = illnessService.list(new QueryWrapper<Illness>().like("ill_name",words));
+        msg.setInfo("success");
+        msg.setData(illnesses);
+
+        return msg;
     }
 }

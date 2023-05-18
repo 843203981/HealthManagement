@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+
+    <title>Health -健康信息</title>
+
+    <!-- Vendors Style-->
+    <link rel="stylesheet" th:href="@{css/vendors_css.css}">
+
+    <!-- Style-->
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/skin_color.css}">
+
+
+</head>
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+
+<div class="wrapper">
+    <div id="loader"></div>
+    <!---------------------------------------------------------------------------------------------------------------------------------------------------->
+    <!-- Content Wrapper. Contains page content -->
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="page-title">用户账号管理</h3>
+                <div class="d-inline-block align-items-center">
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                            <li class="breadcrumb-item" aria-current="page">用户账号</li>
+                            <li class="breadcrumb-item active" aria-current="page">用户账号管理</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h4 class="box-title text-info" ><i class="ti-user mr-15"></i><span>用户表</span> </h4>
+                    <div class="box-controls pull-right">
+                        <div class="lookup lookup-circle lookup-right">
+                            <input type="text" id="searchInput" name="s">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>序号</th>
+                                <th>用户名</th>
+                                <th>姓名</th>
+                                <th>密码</th>
+                                <th>权限</th>
+                                <th><div class="row pull-left">
+                                    <div class="ti-plus" id="add-icon"></div>
+                                    <div class="ti-close" id="close-icon" style="display: none"></div>
+                                </div></th>
+                            </tr>
+                            <tr id="add-input" class="add1"  style="display: none">
+                                <td><input class="form-control" id="1" name="1"></td>
+                                <td><input class="form-control" id="2" name="2"></td>
+                                <td><input class="form-control" id="3" name="3"></td>
+                                <td><input class="form-control" id="4" name="4"></td>
+                                <td><select class="form-control select2" id="5" style="width: 100%;">
+                                    <option>用户</option>
+                                    <option>管理员</option>
+                                </select></td>
+                                <td style="padding: 0"><div class="pull-left"><div class="ti-check"  id="check-icon" style="display: none"></div></div>
+                                </td>
+                            </tr>
+                            <tr th:each="user, iterStat:${users}">
+                                <td th:text="${user.id}"> </td>
+                                <td th:text="${user.uname}"> </td>
+                                <td th:text="${user.name}"> </td>
+                                <td th:text="${user.password}"> </td>
+                                <td th:text="${user.admin}"> </td>
+                                <td>
+                                    <div class="row pull-left">
+                                        <div class="ti-pencil edit-icon" th:data-id="${user.id}"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="ti-trash delete-icon" th:data-id="${user.id}"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    // 获取所有的编辑图标元素
+    var editIcons = document.querySelectorAll(".edit-icon");
+
+    // 为每个编辑图标元素添加点击事件处理程序
+    editIcons.forEach(function(icon) {
+        icon.addEventListener("click", function() {
+            // 获取被点击编辑图标所在行的数据
+            var row = this.closest("tr");
+            var rowData = Array.from(row.querySelectorAll("td")).map(function(td, index) {
+                if (index === 4) {
+                    // 最后一列，根据值设置文本内容
+                    return td.innerText === "1" ? "管理员" : "用户";
+                }
+                return td.innerText;
+            });
+
+            // 将数据写入add-input中的对应元素
+            var addInput = document.getElementById("add-input");
+            var inputElements = addInput.querySelectorAll("input, select");
+            inputElements.forEach(function(input, index) {
+                input.value = rowData[index];
+            });
+
+            // 显示add-input行
+            addInput.style.display = "table-row";
+            var checkIcon = addInput.querySelector("#check-icon");
+            checkIcon.style.display = "block";
+
+            row.style.display = "none";
+        });
+    });
+
+    /*------------------------------------------------*/
+    // 获取搜索输入框元素
+    var searchInput = document.getElementById("searchInput");
+
+    // 添加键盘事件处理程序
+    searchInput.addEventListener("input", function(event) {
+        // 获取搜索词
+            var searchTerm = searchInput.value.trim();
+            // 调用查询函数，传入搜索词作为参数
+            Search(searchTerm);
+
+    });
+
+    // 查询函数的示例
+    function Search(searchTerm) {
+        // 在这里执行查询操作
+        console.log("执行查询，搜索词为：" + searchTerm);
+        $.ajax({
+            type: "POST",
+            url: "/user/select",
+            data: {
+                "words": searchTerm
+            },
+            success: function (data) {
+                if (data.info === "success") {
+                    updateTable(data.data);
+                } else {
+                    alert(data.info);
+                }
+            },
+            error: function () {
+                alert("请求失败");
+            }
+        });
+    }
+
+    function updateTable(users) {
+        // 获取表格元素
+        var table = document.querySelector(".table-hover");
+
+        // 清空表格内容
+        while (table.rows.length > 1) {
+            table.deleteRow(1);
+        }
+
+        // 重新填充表格
+        users.forEach(function(user) {
+            var newRow = table.insertRow(-1);
+            newRow.innerHTML = "<td>" + user.id + "</td>" +
+                "<td>" + user.uname + "</td>" +
+                "<td>" + user.name + "</td>" +
+                "<td>" + user.password + "</td>" +
+                "<td>" + user.admin + "</td>" +
+                "<td><div class='row pull-left'><div class='ti-pencil edit-icon' data-id='" + user.id + "'></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class='ti-trash' id='delete-icon'></div></div></td>";
+        });
+    }
+
+    // 获取所有的删除图标元素
+    var deleteIcons = document.querySelectorAll(".delete-icon");
+
+    // 为每个删除图标元素添加点击事件处理程序
+    deleteIcons.forEach(function(icon) {
+        icon.addEventListener("click", function() {
+            // 获取被点击删除图标所在行的数据和ID
+            var row = this.closest("tr");
+            var id = this.getAttribute("data-id");
+
+            // 调用删除行数据的函数，并传入相应的数据和ID
+            deleteUser(id);
+        });
+    });
+
+    // 删除行数据的函数
+    function deleteUser( id) {
+        let data = {
+            "id": id
+        };
+        $.ajax({
+            url: "/user/delete",
+            type: "POST",
+            data: data,
+            dataType: "JSON",
+            success: function (json) {
+                alert(json.info);
+                // 在成功删除数据后，可以选择更新表格或者重新加载页面
+                // 重新加载页面示例：
+                window.location.reload();
+            },
+            error: function (xhr) {
+                alert("未知错误" + xhr.message);
+            }
+        });
+    }
+</script>
+
+<script th:inline="javascript">
+    function open() {
+        document.getElementById('add-icon').style.display = "none";
+        document.getElementById('check-icon').style.display = "";
+        document.getElementById('close-icon').style.display = "";
+        document.getElementById('add-input').style.display = "";
+    }
+    function close() {
+        document.getElementById('add-icon').style.display = "";
+        document.getElementById('check-icon').style.display = "none";
+        document.getElementById('close-icon').style.display = "none";
+        document.getElementById('add-input').style.display = "none";
+
+    }
+
+    function commit() {
+        var myselect=document.getElementById("5");
+        var index = myselect.selectedIndex;// selectedIndex是所选中的项的index
+        var a = document.getElementById('1').value;
+        var b = document.getElementById('2').value;
+        var c = document.getElementById('3').value;
+        var d = document.getElementById('4').value;
+        if(myselect.options[index].value === "用户"){
+            var e = 0;
+        }else{
+            var e = 1;
+        }
+
+        if(!a && !b && !c  && !d  && !e ){
+            alert("数据为空");
+        }else{
+            let data = {
+                "id":a,
+                "uname":b,
+                "name":c,
+                "password":d,
+                "admin":e
+                };
+            $.ajax({
+                url:"/user/update",
+                type:"POST",
+                data:data,
+                dataType:"JSON",
+                success:function (json) {
+                    alert(json.info);
+                    window.location.reload();
+                },
+                error:function (xhr) {
+                    alert("未知错误"+xhr.message);
+                }
+            })
+
+        }
+
+    }
+
+
+    document.getElementById('add-icon').addEventListener("click",open);
+    document.getElementById('close-icon').addEventListener("click",close);
+    document.getElementById('check-icon').addEventListener("click",commit);
+
+</script>
+
+<!-- Vendor JS -->
+<script th:src="@{js/vendors.min.js}"></script>
+<script th:src="@{js/chat-popup.js}"></script>
+<script th:src="@{js/feather.min.js}"></script>
+
+<script th:src="@{js/apexcharts.js}"></script>
+<script th:src="@{js/moment.min.js}"></script>
+<script th:src="@{js/fullcalendar.js}"></script>
+
+<!-- EduAdmin App -->
+<script th:src="@{js/template.js}"></script>
+<script th:src="@{js/dashboard.js}"></script>
+<script th:src="@{js/calendar.js}"></script>
+
+</body>
+</html>
