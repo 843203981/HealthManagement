@@ -51,8 +51,8 @@ public class IllnessServiceImpl extends ServiceImpl<IllnessMapper, Illness>  imp
     }
 
     @Override
-    public void asyncUpload(File file) throws org.apache.poi.openxml4j.exceptions.InvalidFormatException, IOException {
-        List<UserIllness> userIllnesses = excelUtils.toList(file);
+    public void asyncUpload(File file,Integer id) throws org.apache.poi.openxml4j.exceptions.InvalidFormatException, IOException {
+        List<UserIllness> userIllnesses = excelUtils.toList(file,id);
         int runSize =executorConfig.getCorePoolSize();//线程池核心线程数量
         int row = userIllnesses.size();
         int count = row/runSize+1;

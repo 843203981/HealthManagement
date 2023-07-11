@@ -72,7 +72,7 @@ public class MatchUtils {
                 msg.setName("体温偏高");
                 msg.setHead("bg-warning");
                 msg.setInfo("您的体温偏高");
-                msg.setAdvice("请注意休息");
+                msg.setAdvice("请多喝热水");
                 msgs.add(msg);
             }
         }
@@ -128,7 +128,7 @@ public class MatchUtils {
                 msg.setName("血压(收缩压)偏高");
                 msg.setHead("bg-warning");
                 msg.setInfo("您的血压(收缩压)偏高");
-                msg.setAdvice("请注意休息");
+                msg.setAdvice("请放松身体");
                 msgs.add(msg);
             }
         }

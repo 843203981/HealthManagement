@@ -36,7 +36,12 @@ public class IllnessController {
         for (UserIllness illness :
                 userIllness
              ) {
-            illness.setIllName(illnessService.getById(illness.getIllId()).getIllName());
+            Illness illness1 = illnessService.getById(illness.getIllId());
+            if(illness1 != null){
+                illness.setIllName(illness1.getIllName());
+            }else {
+                illness.setIllName("");
+            }
         }
         model.addAttribute("userIllness", userIllness);
         log.info("illnessService.getDiseaseByUserId((Integer) session.getAttribute(\"id\"))");
@@ -59,8 +64,9 @@ public class IllnessController {
 
     @ResponseBody
     @RequestMapping("/upload")
-    public Msg upload(@RequestParam("file1") MultipartFile file1) throws IOException, InvalidFormatException, org.apache.poi.openxml4j.exceptions.InvalidFormatException {
+    public Msg upload(@RequestParam("file1") MultipartFile file1, HttpServletRequest request) throws IOException, InvalidFormatException, org.apache.poi.openxml4j.exceptions.InvalidFormatException {
         Msg msg = new Msg();
+        Integer id = Integer.valueOf((String) request.getSession().getAttribute("id"));
         Date dNow = new Date( );
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh_mm_ss");
         String time = ft.format(dNow);
@@ -71,7 +77,7 @@ public class IllnessController {
         File file = new File(filePath+"/"+time+file1.getOriginalFilename()+"data.xlsx");
         file1.transferTo(file);
 
-        illnessService.asyncUpload(file);
+        illnessService.asyncUpload(file,id);
         msg.setInfo("上传成功");
         return msg;
     }

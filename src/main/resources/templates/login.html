@@ -164,7 +164,8 @@
 <body>
 <div class="container" id="showHtml">
     <div class="div-description">
-        <img src="img/2.png" alt=""><span th:value="${session.uname}">更多信息..</span>
+        <h1 style="margin: 0;color:#6f86d6;position: fixed;top: 50px">个人健康管理系统</h1>
+        <img src="img/2.png" alt="">
     </div>
     <div class="div-form"><!--action="/login"  method="post"-->
         <form id="loginForm"  class="form-userLogin">
@@ -193,7 +194,8 @@
         </form>
     </div>
     <div class="div-description">
-        <img src="img/1.png" alt=""><span>更多信息..</span>
+        <h1 style="margin: 0;color:#52b5e8;position: fixed;top: 50px">个人健康管理系统</h1>
+        <img src="img/1.png" alt="">
     </div>
 </div>
 </body>
@@ -225,11 +227,23 @@
 </script>
 
 <script type="text/javascript">
+    // RSA前端加密
+    function encrypt(key, oldPwd) {
+        let encrypt = new JSEncrypt();
+        encrypt.setPublicKey(key);
+        let encrypted = encrypt.encrypt(oldPwd);
+        return encrypted;
+    }
+
     $("#bt").click(function () {
         let data = $("#loginForm").serializeArray();
         let publicKey = data[0].value;
         let username = data[1].value;
         let oldPwd = data[2].value;
+        if(username === "" || oldPwd === ""){
+            alert("账号或密码不能为空");
+            return;
+        }
         let encrypt_Pwd = encrypt(publicKey, oldPwd);
         let data1 = {"uname": username, "password": encrypt_Pwd};
         $.ajax({
@@ -258,6 +272,10 @@
         let publicKey = data[0].value;
         let username = data[1].value;
         let oldPwd = data[2].value;
+        if (username === "" || oldPwd === "") {
+            alert("账号或密码不能为空");
+            return;
+        }
         let encrypt_Pwd = encrypt(publicKey, oldPwd);
         let data1 = {"uname": username, "password": encrypt_Pwd};
         $.ajax({
@@ -281,13 +299,7 @@
         });
     });
 
-    // RSA前端加密
-    function encrypt(key, oldPwd) {
-        let encrypt = new JSEncrypt();
-        encrypt.setPublicKey(key);
-        let encrypted = encrypt.encrypt(oldPwd);
-        return encrypted;
-    }
+
 </script>
 
 

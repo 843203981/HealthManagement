@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @Component
 public class ExcelUtils {
-    public List<UserIllness> toList(File file) throws IOException,  org.apache.poi.openxml4j.exceptions.InvalidFormatException {
+    public List<UserIllness> toList(File file,Integer id) throws IOException,  org.apache.poi.openxml4j.exceptions.InvalidFormatException {
         XSSFWorkbook wb = null;
         try {
             List<UserIllness> userIllnessList = new ArrayList<>();
@@ -32,7 +32,7 @@ public class ExcelUtils {
                 XSSFCell cell0 = row.getCell(0);
                 cell0.setCellType(CellType.STRING);
 
-                Integer id = Integer.parseInt(cell0.getStringCellValue());
+                Integer ill_id = Integer.parseInt(cell0.getStringCellValue());
                 Date updateTime = row.getCell(1).getDateCellValue();
                 String illName = row.getCell(2).getStringCellValue();
                 String illRx = row.getCell(3).getStringCellValue();
@@ -41,6 +41,7 @@ public class ExcelUtils {
 
                 UserIllness userIllness = new UserIllness();
                 userIllness.setId(id);
+                userIllness.setIllId(ill_id);
                 userIllness.setUpdateTime(sdf.format(updateTime));
                 userIllness.setIllName(illName);
                 userIllness.setIllRx(illRx);

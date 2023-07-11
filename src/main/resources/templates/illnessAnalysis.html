@@ -45,9 +45,9 @@
     <section class="content">
 
         <!-- Main content -->
-        <div class="container col-12">
+        <div class="container">
             <div class="row">
-                <div class="box col-12">
+                <div class="box col-12 col-md-10">
                     <div class="box-header with-border">
                         <h4 class="box-title text-info" ><i class="ti-user mr-15"></i><span th:text="${session.name}"></span> </h4>
                     </div>
@@ -63,7 +63,7 @@
                                     <th>血压(收缩压kPa)</th>
                                     <th>血压(舒张压kPa)</th>
                                     <th>血糖(mmol/L)</th>
-                                    <th>体脂率(%)</th>
+                                    <th>血脂(mmol/L)</th>
                                 </tr>
                                 <tr>
                                     <td th:text="${user.id}"> </td>
@@ -81,8 +81,8 @@
                     </div>
 
                 </div>
-                <div class="row col-md-12">
-                <div class="col-md-4" th:each="msg, iterStat:${msgList}">
+                <div class="row col-md-10">
+                <div class="col-md-5" th:each="msg, iterStat:${msgList}">
                     <div class="box box-solid " th:classappend="${msg.head}">
                         <div class="box-header">
                             <h4 class="box-title"><strong>[[${msg.name}]]</strong></h4>

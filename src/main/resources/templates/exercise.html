@@ -35,7 +35,7 @@
             display: none;
             background-color: #FFFFFF;
             z-index: 11;
-            width: 80%;
+            width: 50%;
             height: 80%;
             position: fixed;
             top: 0;
@@ -92,11 +92,10 @@
     <section class="content box">
 
         <!-- Main content -->
-        <div id="exercise" style="height: 500px ;width: 100%"></div>
+        <div class="col-6 col-md-10" id="exercise" style="height: 500px "></div>
 
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
+        <div class="row col-6 col-md-10">
+            <div class="col-6 col-md-12">
                 <div class="box box-solid bg-github ">
                     <div class="box-header">
                         <h4 class="box-title"><strong>运动记录</strong></h4>
@@ -110,8 +109,8 @@
                                 <tr>
                                     <th scope="col">运动</th>
                                     <th scope="col">类型</th>
-                                    <th scope="col">时长</th>
-                                    <th scope="col">消耗</th>
+                                    <th scope="col">时长(min)</th>
+                                    <th scope="col">消耗(Kcal)</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -142,7 +141,7 @@
             </div>
         </div>
         <div class="box-body row col-12 ">
-            <div class="col-md-4">
+            <div class="col-md-6 col-4">
                 <h5 class="my-10">运动类型</h5>
                 <select class="selectpicker" id="type-select" onchange="Change_second_selectWords();">
                     <option>日常活动</option>
@@ -150,19 +149,19 @@
                     <option>无氧运动</option>
                 </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6 col-4">
                 <h5 class="my-10">运动名称</h5>
                 <select class="btn dropdown-toggle btn-rounded btn-default" id="sport-select" style="width: 100%; text-align: left" >
                 </select>
             </div>
             &nbsp;
-            <div class="form-group">
+            <div class="form-group col-md-12 col-4">
                 <div style="height: 10px"></div>
                 <label class="control-label">运动时长</label>
                 <input id="time" type="text" value="30" name="demo3_1" data-bts-button-down-class="btn btn-secondary" data-bts-button-up-class="btn btn-secondary"> </div>
         </div>
     </div>
-    <div class="button-box">
+    <div class="button-box col-md-6 col-4">
         <button type="button" id="close-icon"
                 class="waves-effect waves-light btn btn-rounded btn-primary-light mb-5" onclick="closeBox()">取消
         </button>
@@ -278,7 +277,7 @@
     const gaugeData = [
         {
             value: lowCost,
-            name: '日程活动',
+            name: '日常活动',
             title: {
                 offsetCenter: ['0%', '-30%']
             },

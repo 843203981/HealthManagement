@@ -74,7 +74,7 @@
                 <!-- Main content -->
                 <section class="content">
 
-                    <div class="col-12">
+                    <div class="col-6 col-md-10">
                         <div class="box">
                             <div class="box-header with-border">
                                 <h4 class="box-title text-info" ><i class="ti-user mr-15"></i><span th:text="${session.name}"></span> </h4>
@@ -228,7 +228,7 @@
             type: 'post',
             url: "/illness/upload", //这个是我们这边后端提供的接口地址，需要更换成对应的
             data: formData,
-            dataType:"text",
+            dataType:"json",
             processData: false,
             contentType: false,
             success:function (msg) {

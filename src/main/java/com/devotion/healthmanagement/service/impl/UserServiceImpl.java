@@ -55,8 +55,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         String privateKey = rsa.privateKey;
         // 获得RSA类型的私钥
         RSAPrivateKey rsaPrivateKey = RSAUtils.getPrivateKey(privateKey);
-        // 使用私钥解密select_Password
-        //String Decrypt_database = RSAUtils.privateDecrypt(select_Password, rsaPrivateKey);
         // 使用私钥解密经过前端加密用户输入的密文
         String passwordLogin = RSAUtils.privateDecrypt(passwordEncrypt, rsaPrivateKey);
         log.info("数据库密码:"+passwordCheck+",用户登录密码:"+passwordLogin);

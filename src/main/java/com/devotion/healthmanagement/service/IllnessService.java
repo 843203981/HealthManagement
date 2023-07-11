@@ -13,7 +13,7 @@ public interface IllnessService extends IService<Illness> {
     public List<UserIllness> getDiseaseByUserId(Integer id);
     boolean saveUserIllness(UserIllness userIllness);
 
-    void asyncUpload(File file) throws InvalidFormatException, IOException;
+    void asyncUpload(File file,Integer id) throws InvalidFormatException, IOException;
 }
 
 

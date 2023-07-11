@@ -73,6 +73,11 @@ public class PageController {
     @PostMapping("/login")
     public User userLogin(User user, HttpServletResponse response, HttpServletRequest request, Model model) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         log.info("登录"+user);
+        if(userService.getOne(new QueryWrapper<User>().eq("uname",user.getUname()))==null){
+            User userR = new User();
+            userR.setId(0);
+            return userR;
+        }
         User userR = userService.login(user);
         HttpSession session = request.getSession();
         session.setAttribute("uname",String.valueOf(userR.getUname()));
@@ -103,18 +108,27 @@ public class PageController {
         response.sendRedirect("/login");
     }
 
+    @ResponseBody
     @PostMapping("/register")
-    public String register(User user, Model model){
+    public Msg register(User user, Model model){
+        Msg msg = new Msg();
         log.info("注册用户"+user);
+        if(user.getUname()==null||user.getPassword()==null){
+            msg.setInfo("用户名或密码不能为空! ");
+            return msg;
+        }
+        if (userService.getOne(new QueryWrapper<User>().eq("uname",user.getUname()))!=null){
+            msg.setInfo("用户名已存在! ");
+            return msg;
+        }
         user.setId(null);
         user.setAdmin(0);
         if(userService.save(user)){
-            model.addAttribute("msg","注册成功！");
-            return "login";
+            msg.setInfo("注册成功!");
         }else{
-            model.addAttribute("msg","注册失败! ");
-            return "register";
+            msg.setInfo("注册失败!");
         }
+        return msg;
     }
 
 
